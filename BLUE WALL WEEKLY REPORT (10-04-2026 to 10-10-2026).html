@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Blue Wall Weekly Report (10-04-2026 to 10-10-2026)</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
+<style>
+:root{
+  --navy:#1F2A44; --teal:#2A9D8F; --teal-soft:#E3F2EF; --teal-ink:#1B6B60;
+  --bg:#EEF1F5; --surface:#FFFFFF; --card:#F4F6F9; --line:#D9DEE6; --line-soft:#E8EBF0;
+  --ink:#2B2D42; --muted:#7A859B; --input:#FFF6DA; --input-ink:#1F2A44;
+  --off:#F1F2F4; --off-ink:#A6ACB8; --no:#B0434B; --bar:#9FD8CF;
+  --head-ink:#FFFFFF; --head-sub:#C9D6E8;
+  color-scheme: light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121722; --surface:#1A2130; --card:#212A3B; --line:#34405A; --line-soft:#2A3448;
+    --ink:#E4E8F0; --muted:#97A3BA; --input:#3A3420; --input-ink:#F5E7B8;
+    --teal-soft:#183A39; --teal-ink:#7FD4C8; --off:#1E2533; --off-ink:#5D687E; --no:#E58A92; --bar:#2E6E66;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121722; --surface:#1A2130; --card:#212A3B; --line:#34405A; --line-soft:#2A3448;
+  --ink:#E4E8F0; --muted:#97A3BA; --input:#3A3420; --input-ink:#F5E7B8;
+  --teal-soft:#183A39; --teal-ink:#7FD4C8; --off:#1E2533; --off-ink:#5D687E; --no:#E58A92; --bar:#2E6E66;
+  color-scheme: dark;
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Segoe UI",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;font-size:14px;line-height:1.45;
+  font-variant-numeric:tabular-nums}
+.wrap{max-width:1440px;margin:0 auto;padding:0 24px 48px}
+header.top{background:var(--navy);color:var(--head-ink)}
+header.top .wrap{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;padding-top:22px;padding-bottom:18px;flex-wrap:wrap}
+header.top h1{margin:0;font-size:26px;font-weight:700;letter-spacing:.2px}
+header.top h1 span{opacity:.55;font-weight:400;margin:0 8px}
+header.top .week{color:var(--head-sub);font-size:14px;margin-top:4px}
+nav.tabs{display:flex;gap:6px}
+nav.tabs button{font:inherit;font-size:13px;font-weight:600;padding:8px 16px;border-radius:6px;border:1px solid rgba(255,255,255,.25);
+  background:transparent;color:var(--head-ink);cursor:pointer}
+nav.tabs button[aria-selected="true"]{background:#fff;color:var(--navy);border-color:#fff}
+nav.tabs button:focus-visible,button:focus-visible,select:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+main{background:var(--surface);border-radius:0 0 10px 10px;padding:8px 28px 32px;box-shadow:0 1px 0 var(--line)}
+section.block{margin-top:22px}
+h2{font-size:16px;color:var(--ink);margin:0 0 12px;padding-bottom:8px;border-bottom:2px solid var(--teal);display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+h2 small{font-size:12.5px;font-weight:400;color:var(--muted)}
+h3{font-size:13.5px;margin:0 0 6px;font-weight:600}
+
+/* location tiles */
+.tiles{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.tile{border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface);display:flex;flex-direction:column}
+.tile .loc{flex:1;font:inherit;font-weight:600;font-size:13.5px;border:0;background:var(--card);color:var(--ink);padding:11px 8px;cursor:pointer;text-align:center;
+  display:flex;align-items:center;justify-content:center;gap:7px;min-height:44px}
+.tile .loc .dot{width:12px;height:12px;border-radius:50%;border:2px solid var(--muted);flex:none}
+.tile.on{border-color:var(--teal)}
+.tile.on .loc{background:var(--teal-soft);color:var(--teal-ink)}
+.tile.only .loc .dot{border-color:var(--teal);background:var(--teal);box-shadow:inset 0 0 0 2px var(--teal-soft)}
+.tile.off .loc{background:var(--off);color:var(--off-ink)}
+.yn{display:flex;border-top:1px solid var(--line)}
+.yn button{flex:1;font:inherit;font-size:12px;font-weight:700;border:0;background:var(--surface);color:var(--muted);padding:6px 0;cursor:pointer}
+.yn button+button{border-left:1px solid var(--line)}
+.yn button.yes[aria-pressed="true"]{background:var(--teal);color:#fff}
+.yn button.no[aria-pressed="true"]{background:var(--no);color:#fff}
+.tile.mode .loc{min-height:44px}
+.tile.mode.active{border-color:var(--navy)}
+.tile.mode.active .loc{background:var(--navy);color:#fff}
+.tile.mode .loc+.loc{border-top:1px solid var(--line)}
+.filters-note{margin-top:10px;font-size:12.5px;color:var(--muted)}
+.filters-note a{color:var(--teal-ink)}
+
+/* KPIs */
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.kpi{background:var(--card);border-left:4px solid var(--teal);border-radius:4px 8px 8px 4px;padding:14px 18px}
+.kpi .lab{font-size:12.5px;color:var(--muted);font-weight:600}
+.kpi .val{font-size:30px;font-weight:700;color:var(--ink);line-height:1.2;margin:4px 0 2px}
+.kpi .sub{font-size:12.5px;color:var(--teal-ink)}
+
+/* charts */
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 28px}
+.chart{min-width:0}
+.chart svg{width:100%;height:auto;display:block;overflow:visible}
+.chart svg text{fill:var(--ink);font-family:inherit}
+.chart svg .axis{fill:var(--muted)}
+.chart svg .lbl{font-weight:700}
+.legend{display:flex;flex-direction:column;gap:6px;font-size:12.5px;justify-content:center}
+.legend span.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:7px;vertical-align:-1px}
+.legend .row{display:flex;justify-content:space-between;gap:14px}
+.legend .row b{font-weight:600}
+.pie-wrap svg{max-width:310px;margin:0 auto}
+.pie-wrap{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);align-items:center;gap:12px}
+.empty{color:var(--muted);font-size:13px;padding:40px 0;text-align:center}
+
+/* controls */
+.controls{display:grid;grid-template-columns:1fr 1.3fr 1fr 0.8fr 1fr;gap:10px 16px;margin-bottom:6px}
+@media (max-width:1100px){.controls{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.ctl{display:flex;flex-direction:column;gap:4px;font-size:12.5px;font-weight:600;color:var(--muted)}
+.ctl select{font:inherit;font-size:13.5px;font-weight:600;color:var(--input-ink);background:var(--input);border:1px solid var(--line);border-radius:6px;padding:8px 10px;min-height:38px;cursor:pointer}
+.seg{display:flex;border:1px solid var(--line);border-radius:6px;overflow:hidden;min-height:38px}
+.seg button{flex:1;font:inherit;font-size:13px;font-weight:600;border:0;background:var(--surface);color:var(--ink);cursor:pointer}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--navy);color:#fff}
+.warn{color:var(--no);font-size:12.5px;font-style:italic;min-height:18px}
+.status{font-size:12.5px;color:var(--muted);margin:2px 0 10px}
+.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:13px}
+thead th{background:var(--navy);color:#fff;font-weight:600;text-align:left;padding:10px 12px;position:sticky;top:0;white-space:nowrap}
+th.num,td.num{text-align:right}
+th.c,td.c{text-align:center}
+tbody td{padding:8px 12px;border-bottom:1px solid var(--line-soft)}
+tbody tr:nth-child(even) td{background:var(--card)}
+td.item{font-weight:600}
+td.subc{color:var(--muted)}
+td.bar{position:relative}
+td.bar i{position:absolute;left:0;top:4px;bottom:4px;background:var(--bar);border-radius:0 3px 3px 0;opacity:.75}
+td.bar span{position:relative}
+.more{margin-top:12px;text-align:center}
+.more button{font:inherit;font-weight:600;font-size:13px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:6px;padding:8px 16px;cursor:pointer}
+
+/* overview */
+table.score td,table.score th{white-space:nowrap}
+tr.total td{background:var(--navy)!important;color:#fff;font-weight:700;border:0}
+.recon{max-width:460px}
+.recon table{min-width:0}
+.recon td{padding:7px 12px}
+.recon tr:last-child td{font-weight:700;border-top:2px solid var(--navy)}
+.note{font-size:12.5px;color:var(--muted);font-style:italic;margin-top:8px}
+[hidden]{display:none!important}
+
+@media (max-width:1100px){.tiles{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (max-width:860px){
+  .grid2{grid-template-columns:minmax(0,1fr)}
+  .controls{grid-template-columns:repeat(2,minmax(0,1fr))}
+  main{padding:4px 16px 24px}
+  .wrap{padding:0 12px 32px}
+}
+@media (max-width:600px){
+  .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .kpis{grid-template-columns:minmax(0,1fr)}
+  .controls{grid-template-columns:minmax(0,1fr)}
+  .pie-wrap{grid-template-columns:minmax(0,1fr)}
+  header.top h1{font-size:21px}
+}
+@media print{
+  body{background:#fff}
+  nav.tabs,.more,.yn{display:none}
+  main{box-shadow:none;padding:0}
+  .block{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div>
+      <h1>Blue Wall<span>|</span>Weekly Sales Report</h1>
+      <div class="week">📅 Week of <span id="week"></span></div>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button role="tab" id="tab-dash" aria-selected="true" aria-controls="view-dash">📊 Dashboard</button>
+      <button role="tab" id="tab-over" aria-selected="false" aria-controls="view-over">🏬 Location overview</button>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+<main>
+  <!-- DASHBOARD -->
+  <div id="view-dash" role="tabpanel" aria-labelledby="tab-dash">
+    <section class="block">
+      <h2>📍 Locations <small>Click a location to see it alone. Use Yes / No to build a custom mix.</small></h2>
+      <div class="tiles" id="tiles"></div>
+      <div class="filters-note">🗂 Filters in view: <b id="fnote"></b> &nbsp;<a href="#rankings">Change filters in item rankings</a></div>
+    </section>
+
+    <section class="block">
+      <div class="kpis">
+        <div class="kpi"><div class="lab">💰 Net sales</div><div class="val" id="k-sales"></div><div class="sub" id="k-sales-sub"></div></div>
+        <div class="kpi"><div class="lab">📦 Units sold</div><div class="val" id="k-units"></div><div class="sub" id="k-units-sub"></div></div>
+        <div class="kpi"><div class="lab">🧾 Items sold</div><div class="val" id="k-items"></div><div class="sub">Distinct items with sales</div></div>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>📊 Performance</h2>
+      <div class="grid2">
+        <div class="chart"><h3>📍 Net sales by location</h3><div id="c-loc"></div></div>
+        <div class="chart"><h3>🥧 Category mix (selected locations)</h3><div id="c-cat"></div></div>
+        <div class="chart"><h3>🏅 Top 10 items by net sales</h3><div id="c-top"></div></div>
+        <div class="chart"><h3>📈 Item sales distribution (number of items per sales band)</h3><div id="c-hist"></div></div>
+      </div>
+    </section>
+
+    <section class="block" id="rankings">
+      <h2>🏆 Item rankings</h2>
+      <div class="controls">
+        <label class="ctl">🗂 Category<select id="sel-cat"></select></label>
+        <label class="ctl">🏷 Sub-category<select id="sel-sub"></select></label>
+        <div class="ctl">🔀 View<div class="seg" id="seg-view"><button data-v="Top" aria-pressed="true">Top</button><button data-v="Bottom" aria-pressed="false">Bottom</button></div></div>
+        <label class="ctl">🔢 Show<select id="sel-show"></select></label>
+        <div class="ctl">📐 Rank by<div class="seg" id="seg-by"><button data-v="sales" aria-pressed="true">Net sales</button><button data-v="units" aria-pressed="false">Units</button></div></div>
+      </div>
+      <div class="warn" id="warn"></div>
+      <div class="status" id="status"></div>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th class="c">#</th><th>Item</th><th>Location</th><th>Sub-category</th><th class="num">Units</th><th class="num">Net sales</th><th class="num">% share</th><th class="num">Avg price</th></tr></thead>
+          <tbody id="rank-body"></tbody>
+        </table>
+      </div>
+      <div class="more"><a href="#top-of-page" id="backtop" style="font-size:12.5px;color:var(--teal-ink)">Back to top</a></div>
+    </section>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div id="view-over" role="tabpanel" aria-labelledby="tab-over" hidden>
+    <section class="block">
+      <h2>🏬 Location scorecard <small>All locations, all categories</small></h2>
+      <div class="table-scroll">
+        <table class="score">
+          <thead><tr><th>Location</th><th class="num">Net sales</th><th class="num">% share</th><th class="num">Units</th><th class="num">Avg price</th><th class="num">Items</th><th>Best seller</th><th class="num">Best seller $</th><th class="c">Rank</th></tr></thead>
+          <tbody id="score-body"></tbody>
+        </table>
+      </div>
+    </section>
+    <section class="block recon">
+      <h2>🧮 Week reconciliation <small>From POS totals</small></h2>
+      <div class="table-scroll"><table><tbody id="recon-body"></tbody></table></div>
+      <div class="note">Coupons and tax are recorded at the transaction level and are not split by location.</div>
+    </section>
+    <section class="block">
+      <h2>📊 Share of sales and volume</h2>
+      <div class="grid2">
+        <div class="chart"><h3>🥧 Share of net sales by location</h3><div id="c-share"></div></div>
+        <div class="chart"><h3>📦 Units sold by location</h3><div id="c-units"></div></div>
+      </div>
+    </section>
+  </div>
+</main>
+</div>
+
+<script>
+const DATA = {"week":"Oct 4 – Oct 10, 2026","locs":["Deli","Greenfields","Grill","Harvest","Peets","Peoples Organic","Star Ginger","Tamales","Tavola","Wasabi","Yum Bakery"],"icons":["🥪","🥗","🍔","🧺","☕","🥐","🍜","🌯","🍕","🍣","🧁"],"lcol":["#264653","#2A9D8F","#E76F51","#8AB17D","#7F5539","#B5838D","#E9C46A","#F4A261","#457B9D","#6A994E","#9C89B8"],"cats":["Food","Beverages","Bakery","Scale Items","Scannables"],"ccol":["#2A9D8F","#457B9D","#E9C46A","#8AB17D","#E76F51"],"subs":["Deli Beverages","Deli Entrees","Deli Kiosk","Deli Sides","Deli Snacks","Greenfields Coke Fountain","Greenfields Entrees","Greenfields Modifier","Greenfields Sides","Greenfields Snacks","GRILL Burgers","GRILL Chicken Tenders","GRILL Combo","GRILL Fountain Drink","GRILL Milkshake","GRILL Sides","GRILL Snacks","GRILL Water","Harvest Bagels","Harvest Bakeshop","Harvest Beverages","Harvest Breakfast","Harvest Entrees","Harvest Fruit","Harvest Kiosk Scale","Harvest Scale","Harvest Scale (discount)","PEETS Bakeshop","PEETS Breakfast","PEETS Cold Beverages","PEETS Hot Beverages","PEETS Sandwiches","People Organic Bagel Sandwich","Peoples Organic Bakery Breads","Peoples Organic Bakery Desserts","Peoples Organic Beverages","Peoples Organic Bread","Peoples Organic Breakfast","Peoples Organic Cold Beverages","Peoples Organic Cold Sandwiches","Peoples Organic Cookies","Peoples Organic Deli","Peoples Organic Entrees","Peoples Organic Hot Beverages","Peoples Organic Hot Sandwiches","Peoples Organic Sides","Peoples Organic Snacks","SC Aluminum","SC Bev Other","SC Coke Aluminum","SC Coke Glass","SC Coke Plastic","SC CPK","SC Entrees","SC Glass","SC Grocery","SC HBC","SC Plastic","SC Prep Drinks","SC Snacks","STAR Fountain Drink","STAR Sides","STAR Snacks","STAR Soups","STAR Wok","TAM Bowls","TAM Burritos","TAM Coke","TAM Combos","TAM Nachos","TAM Quesadillas","TAM Salads","TAM Sides","TAM Snacks","TAM Water","TAV Fountain Drink","TAV Mediterranean","TAV Pasta","TAV Pizza","TAV Pizza Slices","TAV Sides","TAV Snacks","Wasabi","Wasabi Beverage","Wasabi Entrees","Wasabi Mods","Wasabi Sides","Wasabi Snacks","YUM Cheesecake","YUM Display Case","YUM Fountain Drink","YUM Fridge","YUM Gelato","YUM Gelato Drink","YUM Order"],"rows":[[0,1,0,"Fountain Drink",15,22.5],[0,1,0,"UMass Water",2,4.0],[0,0,1,"Blue Wall Club",24,316.75],[0,0,1,"Buffalo Chicken",11,138.75],[0,0,1,"Caprese",13,151.0],[0,0,1,"Chicken Bacon Ranch",31,389.5],[0,0,1,"Chicken Pesto",30,369.0],[0,0,1,"Cold Roast Beef Sandwich",8,88.0],[0,0,1,"Cold Tuna Sandwich",3,28.5],[0,0,1,"Cold Turkey Sandwich",1,11.75],[0,0,1,"The BLT",19,241.0],[0,0,2,"Blue Wall Club",422,5695.75],[0,0,2,"Buffalo Chicken",239,3145.0],[0,0,2,"Caprese",209,2495.75],[0,0,2,"Chicken Bacon Ranch",581,7517.0],[0,0,2,"Chicken Pesto",468,6093.75],[0,0,2,"Chips",34,51.0],[0,0,2,"Cold Ham Sandwich",7,79.25],[0,0,2,"Cold Tuna Sandwich",24,242.25],[0,0,2,"Cold Turkey Sandwich",25,270.25],[0,0,2,"The BLT",169,2246.5],[0,0,3,"COMBO Chip",1,2.5],[0,0,3,"Combo Fruit",1,3.0],[0,0,4,"Apple",1,1.25],[0,0,4,"Apple",1,1.25],[0,0,4,"Chips",6,9.0],[1,1,5,"Fountain Drink",602,903.0],[1,1,5,"UMass Water",10,20.0],[1,0,6,"Chx Tender",10,110.0],[1,0,6,"Create Your Own Salad",190,2327.5],[1,0,6,"Mediterranean Salad",66,808.5],[1,0,6,"Salad Buff Chx",71,781.0],[1,0,6,"Salad Caesar",212,2332.0],[1,0,6,"Salad Cobb",149,1825.25],[1,0,6,"Salad Garden",9,87.75],[1,0,6,"Salad Power",49,539.0],[1,0,6,"Salad Southwest",217,2604.0],[1,0,6,"Wrap Buff Chx",208,2288.0],[1,0,6,"Wrap Caesar",1045,11495.0],[1,0,6,"Wrap Cobb",141,1727.25],[1,0,6,"Wrap Create Your Own",463,5671.75],[1,0,6,"Wrap Garden",8,78.0],[1,0,6,"Wrap Mediter",38,465.5],[1,0,6,"Wrap Power",44,484.0],[1,0,6,"Wrap Southwest",223,2676.0],[1,0,6,"extra standard topping",2,3.0],[1,0,7,"Add Avocado",130,325.0],[1,0,7,"Add Bacon Crumbles",95,308.75],[1,0,7,"Add Blueberry",5,11.25],[1,0,7,"Add Chickpea",32,64.0],[1,0,7,"Add Chs GreeFiel Mix",1,1.5],[1,0,7,"Add Chx Grilled",25,106.25],[1,0,7,"Add Chx Tender Buff GreeFiel",107,454.75],[1,0,7,"Add Chx Tender GreeFiel",149,633.25],[1,0,7,"Add Egg Hard Boiled",61,106.75],[1,0,7,"Potato Sweet Roasted",47,94.0],[1,0,8,"Add Dolma",1,3.25],[1,0,8,"Hummus",8,14.0],[1,0,8,"Potato Sweet Roasted",1,2.0],[1,0,8,"Tofu Bites",9,33.75],[1,0,9,"Banana",99,123.75],[1,4,59,"Cape Cod chips 1oz",171,213.75],[2,1,13,"Fountain Drink",409,613.5],[2,1,14,"Chocolate Milkshake",70,437.5],[2,1,14,"Strawberry Milkshake",39,243.75],[2,1,14,"Vanilla Milkshake",73,456.25],[2,1,17,"UMass Water",1,1.5],[2,0,10,"4B Burger",377,3828.25],[2,0,10,"Blue Wall Burger",313,3189.75],[2,0,10,"Burger Beef",47,463.5],[2,0,10,"Cheeseburger",165,1817.5],[2,0,10,"Chicken Burger",105,1103.75],[2,0,10,"Double Impossible Burger",3,34.25],[2,0,10,"Hamp Golden Spicy Burger",485,4916.0],[2,0,10,"Hatch Burger",391,3880.75],[2,0,10,"Single Impossible Burger",53,564.75],[2,0,11,"Chicken Basket",996,12459.5],[2,0,11,"Chicken Tender",140,1408.5],[2,0,12,"COMBO w Chips",3,5.25],[2,0,12,"COMBO w Fries",1162,4648.0],[2,0,12,"COMBO w Fruit",9,27.0],[2,0,12,"COMBO w Onion Rings",186,744.0],[2,0,12,"COMBO w Sweet Potato Fries",37,166.5],[2,0,15,"Fried Egg",4,12.0],[2,0,15,"Fries",190,712.5],[2,0,15,"Onion Rings",81,364.5],[2,0,15,"Sweet Potato Fries",18,81.0],[2,0,16,"Apple",8,10.0],[2,0,16,"Banana",7,8.75],[3,1,20,"Apple Cider 16oz",89,445.0],[3,1,20,"Coffee 12oz",125,343.75],[3,1,20,"Coffee 16oz",53,172.25],[3,1,20,"Fountain Drink",173,259.5],[3,1,20,"Hot Tea 12oz",32,96.0],[3,0,18,"Bagel Plain",64,166.25],[3,0,18,"Bagel and Butter",21,65.0],[3,0,18,"Bagel and CC",61,264.0],[3,0,18,"Bagel w PB",2,7.0],[3,0,19,"Assorted Pastry",167,334.0],[3,0,19,"Cookie",189,282.75],[3,0,19,"Lemon Zucchini Bread",89,222.5],[3,0,19,"Mini Croissant",70,140.0],[3,0,19,"Pumpkin Cheese Bread",29,72.5],[3,0,21,"Congee",4,14.0],[3,0,21,"Croissant w Egg and Cheese",68,357.0],[3,0,21,"Eng Muffin w Sausage Egg Cheese",115,632.5],[3,0,21,"Oatmeal Lg",3,10.5],[3,0,21,"Oatmeal Sm",6,15.0],[3,0,22,"Slice - Cheese Pizza",361,1600.85],[3,0,22,"Slice - Pepperoni Pizza",258,1403.31],[3,0,22,"Slice - Spec Pizza",34,187.0],[3,0,22,"Slice - Veggie Pizza",58,294.52],[3,0,22,"Soup 12oz",163,875.04],[3,0,22,"Soup 8oz",115,497.47],[3,0,22,"Whole - Cheese Pizza 16in",2,34.0],[3,0,22,"Whole - Late Night Pizza",2,20.0],[3,0,22,"Whole - Pepperoni Pizza 16in",1,10.0],[3,0,22,"Whole - Spec Pizza 16in",3,66.0],[3,0,23,"Apple",47,58.75],[3,0,23,"Asian Pear",65,195.0],[3,0,23,"Avocado",172,430.0],[3,0,23,"Banana",175,218.75],[3,0,23,"Cactus Pear",7,14.0],[3,0,23,"Cara Cara Orange",83,166.0],[3,0,23,"Dragon Fruit",9,31.5],[3,0,23,"Fruit Persimmon",18,45.0],[3,0,23,"Halo 3pk",16,48.0],[3,0,23,"Mango",17,59.5],[3,0,23,"Nectarine",4,7.0],[3,0,23,"Orange",5,6.25],[3,0,23,"Peach",1,1.75],[3,0,23,"Pear",6,7.5],[3,0,23,"Plum",26,45.5],[3,0,23,"Pomegranate",18,63.0],[3,0,23,"Sumo Oranges",25,50.0],[3,3,24,"Scale Plate",11,125.42],[3,3,24,"Scale To Go",207,2480.12],[3,3,25,"Scale Plate",571,5748.37],[3,3,25,"Scale To Go",5499,61358.38],[3,3,26,"Scale To Go",19,186.84],[3,4,47,"C2O Coconut Water Original",78,312.0],[3,4,47,"Clea Caus Blac Berr",40,180.0],[3,4,47,"Clea Caus Lemo Lime",32,144.0],[3,4,47,"Clea Caus Peac",24,108.0],[3,4,47,"Clea Caus Rasp",37,166.5],[3,4,47,"Clea Caus Stil Blue berr",23,103.5],[3,4,47,"Clea Caus Stil Lemo Tea",56,252.0],[3,4,47,"Clea Caus Stil Mint Hone",48,216.0],[3,4,47,"Coconut Water Pineapple",35,140.0],[3,4,47,"Fogbuster Black",22,110.0],[3,4,47,"Fogbuster Sweet vanilla",22,110.0],[3,4,47,"Jenj orig latt",47,235.0],[3,4,47,"Katalyst Komb Berry Bliss",3,15.0],[3,4,47,"Katalyst Komb Cocord Grape",8,40.0],[3,4,47,"Katalyst Komb Ginger",9,45.0],[3,4,47,"Katalyst Komb Mango",7,35.0],[3,4,47,"Katalyst Komb Pine",15,75.0],[3,4,47,"Katalyst Komb Rasp-Lime",10,50.0],[3,4,47,"Loco Coff chur",11,55.0],[3,4,47,"Loco Coff moch libr",12,60.0],[3,4,47,"Loco Coff vanilla",8,40.0],[3,4,47,"Moshi Asian Pear Ginger",17,59.5],[3,4,47,"Moshi FujiApple Con Grape",7,24.5],[3,4,47,"Moshi White Peach Yuzu",8,28.0],[3,4,47,"Recess Black cherry",5,17.5],[3,4,47,"Recess Grapfruit Tang",3,10.5],[3,4,47,"Recess Lime Citrus",8,28.0],[3,4,47,"Recess Rasp lemon",6,21.0],[3,4,47,"Recess Strw Rose",1,3.5],[3,4,47,"Recess Tropical Bliss",5,17.5],[3,4,47,"Spindrift Bloo Orang Tang",7,15.75],[3,4,47,"Spindrift Cherry 12oz",10,22.5],[3,4,47,"Spindrift Ginger Lime",4,8.36],[3,4,47,"Spindrift Grapeade",9,20.25],[3,4,47,"Spindrift Grapefruit",14,31.5],[3,4,47,"Spindrift Lemo Lime",4,9.0],[3,4,47,"Spindrift Passion Fruit Orange",10,22.5],[3,4,47,"Spindrift Peach Strawberry",6,13.5],[3,4,47,"Wandering Bear Double Latte",18,99.0],[3,4,47,"Wandering Bear Mocha Latte",28,154.0],[3,4,47,"Wandering Bear Vanilla Latte",30,165.0],[3,4,47,"c2o coco wate pulp can  17z",25,100.0],[3,4,48,"Body Armor Fit Orange Mango 12oz",8,28.0],[3,4,48,"Body Armor Fit Tropical 12oz",10,35.0],[3,4,48,"Body Armor Fit Watermelon lime 12oz",10,35.0],[3,4,48,"Mapleline Chocolate Milk",171,427.5],[3,4,48,"Mapleline Coffee Milk",140,350.0],[3,4,48,"Mapleline Whole Milk",73,182.5],[3,4,48,"Spindrift Rasp Lime 12oz",2,4.5],[3,4,48,"Wandering Bear Cold Brew black",18,99.0],[3,4,52,"Cup Fruit Mix",2,11.0],[3,4,52,"Salad Driscoll Berry",29,227.47],[3,4,52,"Salad POC Chix Caes",6,52.25],[3,4,52,"Sand Buff Chix Wrap",46,371.25],[3,4,52,"Sand Chix Mozz",48,384.96],[3,4,52,"Sand Ham Swiss",36,284.75],[3,4,52,"Sand Hummus Veg on wheat",10,55.25],[3,4,52,"Sand PBJ",31,174.97],[3,4,52,"Sand Turk Croiss",8,56.0],[3,4,52,"Sand Turk GF",29,171.5],[3,4,52,"Sand Turk Pest",6,52.25],[3,4,52,"Sand Turk Swiss",70,569.5],[3,4,52,"Sandwich Tuna",21,107.62],[3,4,49,"Flrt Berry Tampting",114,456.0],[3,4,49,"Flrt Guava Lava",97,388.0],[3,4,49,"Flrt Strawberry Fling",123,492.0],[3,4,49,"Flrt Sunset Squeeze",73,292.0],[3,4,49,"JMonsterLoca 16",26,97.5],[3,4,49,"JMonsterMean 16",12,45.0],[3,4,49,"Mons Ultra Vice Guava",143,572.0],[3,4,49,"Monster Blue Hawaiian",137,548.0],[3,4,49,"Monster Flrt Zero Berry",1,4.0],[3,4,49,"Monster Flrt Zero Orange",3,12.0],[3,4,49,"Monster KillerBrew Mean Bean",15,60.0],[3,4,49,"Monster KillerBrew Mocha",13,52.0],[3,4,49,"Monster Mango loco",105,420.0],[3,4,49,"Monster Original",39,156.0],[3,4,49,"Monster Pacific punch",66,264.0],[3,4,49,"Monster Pipeln Pnch",64,256.0],[3,4,49,"Monster Rehab 15.5oz",93,372.0],[3,4,49,"Monster Salt Caramel",26,104.0],[3,4,49,"Monster Ultra Punk Punch",109,436.0],[3,4,49,"Monster Vanilla",685,2740.0],[3,4,49,"Monster Zero Sugar",37,148.0],[3,4,49,"Peace Tea Caddy Shack 16oz",28,112.0],[3,4,49,"Peace Tea Just Peachy 16oz",8,32.0],[3,4,49,"Peace Tea Razzleberry 16oz",30,120.0],[3,4,49,"Peace Tea Snoberry 16oz",20,80.0],[3,4,49,"Peace Tea Str-ahberry Lemon 16oz",27,108.0],[3,4,49,"Reign Orng Drmsicle",54,202.5],[3,4,49,"Reign Sher",68,255.0],[3,4,49,"Reign Sour Gummy Worm",81,303.75],[3,4,49,"Reign White Gummy Bear",32,120.0],[3,4,49,"Topo Chic Blue Hibi",12,33.0],[3,4,49,"Topo Chic Tang Ging",18,49.5],[3,4,50,"COKE MEXICAN 12z",22,77.0],[3,4,50,"Fanta glass",11,33.0],[3,4,50,"Sprite glass",3,10.5],[3,4,51,"Body Armor Lyte Blue Pom 16oz",16,80.0],[3,4,51,"BodyArmor Drag Berr",11,55.0],[3,4,51,"BodyArmor Flas IV Grap",14,77.0],[3,4,51,"BodyArmor Flas IV Oran",12,66.0],[3,4,51,"BodyArmor Flas IV PineapplePassion",14,77.0],[3,4,51,"BodyArmor Flas IV Stra Kiwi",30,165.0],[3,4,51,"BodyArmor Flas IV Trop Punc",1,5.5],[3,4,51,"BodyArmor Flas IV Watermelon punch",19,104.5],[3,4,51,"BodyArmor IV Zero Lemon Lime",26,130.0],[3,4,51,"BodyArmor Lyte Peach Mango",34,170.0],[3,4,51,"BodyArmor Oran Mang 16oz",7,35.0],[3,4,51,"BodyArmor Sprt Wtr 1L",37,185.0],[3,4,51,"BodyArmor Stra Bana 16oz",17,85.0],[3,4,51,"BodyArmor Trop Passionfruit",4,20.0],[3,4,51,"BodyArmor Watermelon Zero",15,75.0],[3,4,51,"CANADA DRY DT CF FRE",41,102.5],[3,4,51,"CANADA DRY LEMLIM 20oz",36,90.0],[3,4,51,"CANADA DRY MAN ORG 20OZ",18,45.0],[3,4,51,"CANADA DRY TRIP BER 20oz",20,50.0],[3,4,51,"Canada Dry Strawberry splash 20oz",26,65.0],[3,4,51,"Canada Dry20Btl",34,85.0],[3,4,51,"Cher Coke Zero Suga",62,155.0],[3,4,51,"Coke 20Btl",106,265.0],[3,4,51,"Coke Cherry",32,80.0],[3,4,51,"Coke Van 20oz",30,75.0],[3,4,51,"Coke Zero 20Btl",126,315.0],[3,4,51,"Core Power Elite 42 Chocolate 12pk",1,78.0],[3,4,51,"CorePwr Prot Choc 14Oz",90,540.0],[3,4,51,"CorePwr Prot Choc Elit 14Oz",282,1833.0],[3,4,51,"CorePwr Prot Stra Bana 14Oz",11,66.0],[3,4,51,"CorePwr Prot Stra Elit 14Oz",98,637.0],[3,4,51,"CorePwr Prot Vani 14Oz",40,240.0],[3,4,51,"CorePwr Prot Vani Elit 14Oz",143,929.5],[3,4,51,"DIET COKE 20Btl",290,725.0],[3,4,51,"Dasani 1 Liter",13,32.5],[3,4,51,"Dasani 20",24,96.0],[3,4,51,"Diet Coke Cherry 20oz",43,107.5],[3,4,51,"Dr Pepp Zero Suga",31,77.5],[3,4,51,"Dr.Pepper 20Btl",56,140.0],[3,4,51,"DtDrPepper20Btl",60,150.0],[3,4,51,"FANTA PNAPL 20FLOZ",16,40.0],[3,4,51,"FRESCA CTRS 20oz",58,145.0],[3,4,51,"Fanta Strawberry 20oz",17,42.5],[3,4,51,"Gold Peak Green 18oz",30,90.0],[3,4,51,"Gold Peak Lmnde T 18.5oz",32,96.0],[3,4,51,"Gold Peak Sweet Tea 18z",2,6.0],[3,4,51,"Gold Peak unsweet 18oz",38,114.0],[3,4,51,"MinMaid CranAplRsp 15.2",49,147.0],[3,4,51,"MinMaid Lemonade 20oz",42,126.0],[3,4,51,"MinMaid Orange 15.2",74,222.0],[3,4,51,"MinMaidAppl15.2",72,216.0],[3,4,51,"Minmde Pnk Lemnde 20oz",37,111.0],[3,4,51,"PWRADE FRT PNCH 20floz",17,46.75],[3,4,51,"PWRADE LEMLIM 20oz",21,57.75],[3,4,51,"PWRADE MXBRY 20oz",26,71.5],[3,4,51,"PWRADE Orange",11,30.25],[3,4,51,"PWRADE Zero Grape",37,101.75],[3,4,51,"Powerade mtn berry blast",72,198.0],[3,4,51,"Powerwater Mtn Berry blast",24,66.0],[3,4,51,"Smartwater 1 Liter",171,769.5],[3,4,51,"Smartwater 1 Liter Alkaline",48,216.0],[3,4,51,"Smartwater 20oz Alkaline",3,7.5],[3,4,51,"Sprite Tropical Mix",16,40.0],[3,4,51,"Sprite Zero sugar",59,147.5],[3,4,51,"Topo Chico Raspberry Lime",16,44.0],[3,4,51,"Topo Chico Tropical Mango",9,24.75],[3,4,51,"Vitamin Water XXX Zero Sugar",54,162.0],[3,4,51,"Vitamin Water XXX Zero sugar",48,144.0],[3,4,51,"Vitamin Water Zero Power C",42,126.0],[3,4,51,"Vitamin Wtr AC BB Pom",82,226.5],[3,4,51,"Vitamin Wtr Drgnfruit",81,243.0],[3,4,51,"Vitamin Wtr Energy 20oz",27,81.0],[3,4,51,"Vitamin Wtr Shine",36,108.0],[3,4,51,"Vitamin Wtr TropMango 20oz",58,174.0],[3,4,51,"Vitamin Wtr zero lemon",34,102.0],[3,4,53,"Gluten Free Chix Broc Alfr",2,22.0],[3,4,53,"Gluten Free Chix Quesadilla",47,488.25],[3,4,53,"Gluten Free Sausage Pasta",2,22.0],[3,4,54,"GT Alive Mush Root Beer",10,65.0],[3,4,54,"GT Synergy Komb Cosmic Cran",20,130.0],[3,4,54,"GT Synergy Komb Eldr Juniper",12,74.75],[3,4,54,"GT Synergy Komb Gold Pine",19,123.5],[3,4,54,"GT Synergy Komb MysticMango",12,78.0],[3,4,54,"GT Synergy Komb Trilogy",17,110.5],[3,4,54,"GT Synergy Komb Vital C",11,71.5],[3,4,54,"GT Syngergy Komb Guava Goddess",24,156.0],[3,4,54,"Health Ade Komb Berry Lemon",4,26.0],[3,4,54,"Health Ade Komb Bood Orange",7,45.5],[3,4,54,"Health Ade Komb Guava dragon",4,26.0],[3,4,54,"Health Ade Komb Mango lemon",9,58.5],[3,4,54,"Health Ade Kombucha Ginger Lemon",18,117.0],[3,4,54,"Health Ade Kombucha Pink Lady Apple",13,84.5],[3,4,54,"HealthAde Komb Passion fruit",9,58.5],[3,4,54,"Maine Root Ginger Brew",16,52.0],[3,4,54,"Reeds Strongest Ginger Beer",14,45.5],[3,4,54,"Soda Maine Blueberry 12oz",16,52.0],[3,4,54,"Soda Maine Root Beer 12oz",10,32.5],[3,4,54,"Synergy Kombucha",14,91.0],[3,4,55,"BEN & JER AMERICONE DRM",1,8.49],[3,4,55,"BEN & JER CHOC F",21,178.29],[3,4,55,"BEN & JER Cookie Dough",7,59.43],[3,4,55,"BEN & JER GARCIA",15,127.35],[3,4,55,"BEN & JER HLFBKD",27,229.23],[3,4,55,"BEN & JER PB CUP",12,101.88],[3,4,55,"BEN & JER SPRFDG CHUNK",10,84.9],[3,4,55,"BEN & JER TONIGHT DGH",2,16.98],[3,4,55,"Ben & Jer Cookie Dough",17,144.33],[3,4,55,"Ben & Jer Half Bkd Ch",22,186.78],[3,4,55,"Ben & Jer ND Milk & Cookies",2,16.98],[3,4,55,"Ben & Jer Non-Dairy CC CookieDough",8,67.92],[3,4,55,"Ben & Jer PB Dough",2,16.98],[3,4,55,"Ben & Jer Phish Food",1,8.49],[3,4,55,"Ben & Jer Smor Dough",27,229.23],[3,4,55,"Ben & Jer Vanilla",3,25.47],[3,4,55,"C2O Coconut Water Original 1L",85,552.5],[3,4,55,"CS Butter Chicken",1,10.5],[3,4,55,"CS Saag Paneer",1,10.5],[3,4,55,"Cabo Pop Fiery Cheddar",15,120.0],[3,4,55,"Cabo Pop Honey Butter",14,112.0],[3,4,55,"Cabo Pop Premium Butter",12,96.0],[3,4,55,"Cabo Pop Shar Ched",34,272.0],[3,4,55,"Cabo Seri Shar Maca Chee",9,125.91],[3,4,55,"Chili Crisp Oil Lee Kum Kee",6,48.0],[3,4,55,"Coconut Water Pineapple 1L",12,78.0],[3,4,55,"Driscolls Blackberry 6oz",101,404.0],[3,4,55,"Driscolls Blueberry 1pt",60,360.0],[3,4,55,"Driscolls Raspberry 6oz",152,684.0],[3,4,55,"Driscolls Strawberry 16oz",84,462.0],[3,4,55,"Giffords Banana carmel coconut",2,12.0],[3,4,55,"Giffords Cookie Curveball",6,36.0],[3,4,55,"Giffords Spicy strawberry pretz",3,18.0],[3,4,55,"Gree Moun Grin Tort Stri",13,78.0],[3,4,55,"HI-CHEW GRN APL",39,78.0],[3,4,55,"HI-CHEW GRP 1.76oz",30,60.0],[3,4,55,"HI-CHEW MANGO",44,88.0],[3,4,55,"HI-CHEW STRW 1.76oz",52,104.0],[3,4,55,"Liquid IV Firecracker",9,29.25],[3,4,55,"Liquid IV Lemon Lime",9,29.25],[3,4,55,"Liquid IV SF Rasp Lemonade",6,19.5],[3,4,55,"Liquid IV SF White Peach",17,55.25],[3,4,55,"Liquid IV Strawberry",15,48.75],[3,4,55,"Liquid IV Tangerine",8,26.0],[3,4,55,"Liquid IV Watermelom",14,45.5],[3,4,55,"ODoughs GF Brownie bites",10,27.9],[3,4,55,"Salt & Twine salami Bacon bourbon",3,38.25],[3,4,55,"Salt & Twine salami classic",4,51.0],[3,4,55,"Smartwater 20oz",106,265.0],[3,4,55,"SnapDragon Pho Beef",27,128.25],[3,4,55,"SnapDragon Pho Chicken",10,47.5],[3,4,55,"SnapDragon Ramen Chicken",17,76.5],[3,4,55,"SnapDragon Ramen Chili crunch",31,139.5],[3,4,55,"SnapDragon Ramen Miso",14,63.0],[3,4,55,"Sparta EV Olive Oil 1L",7,192.5],[3,4,55,"Tost Refresher Original",1,12.0],[3,4,55,"Tost Refresher Rose",3,36.0],[3,4,55,"Tost Refresher Sangria",4,48.0],[3,4,55,"Vincete Choc Hazelnut Cream",3,51.0],[3,4,55,"Vincete Cream of Pistachio",2,36.0],[3,4,56,"Advil 6pk",15,59.85],[3,4,56,"Allergy Sinus 6pk",6,23.94],[3,4,56,"Altoids Peppermint",19,87.21],[3,4,56,"Altoids Wintergreen",25,137.25],[3,4,56,"Benadryl 6pk",1,4.59],[3,4,56,"Chapstick",16,60.0],[3,4,56,"EmergenC 2pk",10,40.0],[3,4,56,"Hand Sanitizer",4,14.0],[3,4,56,"Honees filled drops 1.6oz",14,21.0],[3,4,56,"Kleenex to go pk",26,39.0],[3,4,56,"Midol 4pk",1,4.0],[3,4,56,"Pepto 6ct",2,8.0],[3,4,56,"Ricola cough drop stick",16,24.0],[3,4,56,"Tums 8ct",2,8.0],[3,4,56,"Tylenol 6pk",7,28.0],[3,4,56,"Tylenol Cold & Flu 6pk",10,45.0],[3,4,57,"Alo Allure Mangosteen Mango",16,56.0],[3,4,57,"Alo Awaken Wheatgerass",6,21.0],[3,4,57,"Alo Crisp Fuji Apple Pear",17,59.5],[3,4,57,"Alo Exposed Honey",21,73.5],[3,4,57,"Glac Samr Wate 22.7oz",22,72.38],[3,4,57,"Gold Peak Sweet Tea 18oz",37,111.0],[3,4,57,"Koia AlmoCnut",7,38.5],[3,4,57,"Koia Cacao Bean",15,82.5],[3,4,57,"Koia ChocBana",19,104.5],[3,4,57,"Koia ChocPB",16,88.0],[3,4,57,"Koia Vanilla Bean",15,82.5],[3,4,57,"Natalies Blood Orange",41,205.0],[3,4,57,"Natalies Lemonade",34,170.0],[3,4,57,"Natalies Pineapple Orange",47,235.0],[3,4,57,"Natalies Tangerine",63,315.0],[3,4,57,"PoM Wonderful",34,144.5],[3,4,57,"Smar Wate Alka 700 ml",12,30.0],[3,4,57,"UMass Water",189,378.0],[3,4,58,"Topo Chico Passion fruit 12oz",15,41.25],[3,4,59,"88 Acres Banan Bread Bar",8,30.0],[3,4,59,"88 Acres Dk Choc Sea Salt",14,42.0],[3,4,59,"88 Acres Oatmeal ChocChip Bar",14,42.0],[3,4,59,"88 Acres Trip Berry Crum Bar",13,39.0],[3,4,59,"Almonds Light salt Blue Diamond",17,42.5],[3,4,59,"Almonds Mikes hot honey Blue D",14,35.0],[3,4,59,"Awake Bar Salted Caramel",47,141.0],[3,4,59,"Awake CM Almnd seasalt",31,38.75],[3,4,59,"Awake CM Caramel",16,20.0],[3,4,59,"Awake CM Crispy milk",32,40.0],[3,4,59,"Awake CM Milk",17,21.25],[3,4,59,"Awake CM PB",21,27.09],[3,4,59,"Babybell cheese",82,81.18],[3,4,59,"Barebell Chocolate Cough",7,28.0],[3,4,59,"Barebells Caramel Cashew",63,252.0],[3,4,59,"Barebells Cookies & Caramel",54,216.0],[3,4,59,"Barebells Creamy Crisp",67,268.0],[3,4,59,"Barebells Key Lime",87,348.0],[3,4,59,"Barebells Salty PB",69,276.0],[3,4,59,"Ben & Jer Amer Drea Mini",33,99.0],[3,4,59,"Ben & Jer Cup Cherry Garcia",10,30.0],[3,4,59,"Ben & Jer Cup Cookie Dough",9,27.0],[3,4,59,"Ben & Jer Cup Fdg Brownie",34,102.0],[3,4,59,"Biena BBQ chickpeas",3,18.0],[3,4,59,"Biena Everything Chickpeas",5,30.0],[3,4,59,"Biena Habanero chickpeas",11,66.0],[3,4,59,"Biena Honey Roasted chickp",8,48.0],[3,4,59,"Biena Rockin Ranch Chickp",9,54.0],[3,4,59,"Biena Sea Salt Chickpeas",4,24.0],[3,4,59,"Biscoff cookies .9oz",67,83.75],[3,4,59,"Blackberries Driscolls 6oz",16,95.84],[3,4,59,"Brewers Crackers Everything",2,17.0],[3,4,59,"Brewers Crackers Pretzel",1,8.5],[3,4,59,"Brewers crackers SeaSalt",2,17.0],[3,4,59,"Brownie Brittle Choc Chip 2.75oz",34,136.0],[3,4,59,"Builders bar Oreo White Fudge",6,24.0],[3,4,59,"CHOCO CHERRY ALMND",9,47.25],[3,4,59,"CHOCO STRNG DARK",16,84.0],[3,4,59,"CHOCOLOVE RICH DARK",12,63.0],[3,4,59,"Cabo Pop Mapl ched",19,152.0],[3,4,59,"Cabo Pop SeaSalt cara ched",20,160.0],[3,4,59,"Cheese Cabot Srs Sharp",75,75.0],[3,4,59,"Cheese Sarg Colby Jack",35,35.0],[3,4,59,"Cheese Sarg Mild Cheddar",30,30.0],[3,4,59,"Cheese Sarg String",87,87.0],[3,4,59,"Chips Cape Cod BBQ",44,110.0],[3,4,59,"Chips Cape Cod Orig",55,137.5],[3,4,59,"Chips Cape Cod Salt&Vin",24,60.0],[3,4,59,"Chips Kettle BBQ 5oz",20,100.0],[3,4,59,"Chips Kettle Jalapeno 5oz",62,310.0],[3,4,59,"Chips Kettle Seasalt 5oz",23,115.0],[3,4,59,"Chips Kettle Seasalt Vin 5oz",45,225.0],[3,4,59,"Chips Kettle Sourcream Onion 5oz",42,210.0],[3,4,59,"Chobani Yogurt Black Cherry",45,123.75],[3,4,59,"Chobani Yogurt Blueberry",45,123.75],[3,4,59,"Chobani yogurt NF",70,192.5],[3,4,59,"Choco Hazelnut",17,89.25],[3,4,59,"Chocolove Drk Choc Extreme",25,131.25],[3,4,59,"Chocolove Hawaiian seasalt",16,84.0],[3,4,59,"Chocolove Milk Choc",43,225.75],[3,4,59,"Chocolove Orange Peel",8,42.0],[3,4,59,"Chocolove PB milk choc",25,131.25],[3,4,59,"Chocolove Pecan cookie",2,10.5],[3,4,59,"Chocolove Pistachio",11,57.75],[3,4,59,"Chocolove Rasp",5,26.25],[3,4,59,"Chocolove Salt Cara",21,110.25],[3,4,59,"Chocolove Toffee Almond",13,68.25],[3,4,59,"Chocolove Walnut seasalt",4,21.0],[3,4,59,"Clif Bldr cho chip cookie dou",46,184.0],[3,4,59,"Clif Bldrs Choc",15,60.0],[3,4,59,"Clif Bldrs Choc Mint",35,140.0],[3,4,59,"Clif Buil Prot Bar Choc PB",19,76.0],[3,4,59,"Clif Builders Cookies n Cream",28,112.0],[3,4,59,"Clio Greek Yogurt Bar Strawberry",10,30.0],[3,4,59,"Clio Greek Yogurt Bar Vanilla",4,12.0],[3,4,59,"Cookie Choc Chip",15,37.5],[3,4,59,"DEEP RIVER KTL ZST JLPNO",10,20.0],[3,4,59,"Deep River BBQ",24,48.0],[3,4,59,"Deep River SeaSlt",46,92.0],[3,4,59,"Deep River SltNPep",34,68.0],[3,4,59,"Deep River Spcy Dill",19,38.0],[3,4,59,"Deep River Swt MOnion",42,84.0],[3,4,59,"Edamame Spicy Wasabi 1.58oz",20,40.0],[3,4,59,"Egg Bites With Bacon",6,30.0],[3,4,59,"FancyP Choc Chip 1oz",8,16.0],[3,4,59,"FancyP Choc Chip 5oz",26,169.0],[3,4,59,"FancyP Coconut Ch Chip 5oz",11,71.5],[3,4,59,"FancyP GF Choc Chip 1oz",11,22.0],[3,4,59,"FancyP GF Choc Chip 5oz",15,97.5],[3,4,59,"FancyP Lemon 5oz",2,13.0],[3,4,59,"FancyP Mint Choc 5oz",11,71.5],[3,4,59,"FancyP Salted Carm 1oz",6,12.0],[3,4,59,"FancyP Salted Carm 5oz",8,52.0],[3,4,59,"GUMMI WORMS",9,54.0],[3,4,59,"GV Chickpea Tajine",1,10.0],[3,4,59,"Gummy Bears",26,156.0],[3,4,59,"Gummy Swedish Fish",52,312.0],[3,4,59,"HF choc chip cook 1.1oz",17,30.43],[3,4,59,"Hi-Chew Watermelon",63,126.0],[3,4,59,"Hipp chic puff whit ched",57,199.5],[3,4,59,"Homefree mini Lemon",5,12.5],[3,4,59,"Hummus Cedar Garlic Pack",31,86.49],[3,4,59,"Hummus Cedar pk Chocolate",23,63.25],[3,4,59,"Hummus Cedar pk Original",28,77.0],[3,4,59,"Hummus Cedar red pep",30,82.5],[3,4,59,"Jerky RF Baby Blues",2,18.0],[3,4,59,"Jerky RF Bourbon Franklin",5,45.0],[3,4,59,"Jerky RF Fiery Habanero Stick",19,57.0],[3,4,59,"Jerky RF Habanero Escobar",2,18.0],[3,4,59,"Jerky RF Honey BBQ Stick",33,99.0],[3,4,59,"Jerky RF Lemon Pep Turkey Stick",12,36.0],[3,4,59,"Jerky RF Maryland Monroe",3,27.0],[3,4,59,"Jerky RF OG Hickory",7,63.0],[3,4,59,"Jerky RF OG Hickory Beef Stick",35,105.0],[3,4,59,"Jerky RF Seoul Survivor 2oz",7,63.0],[3,4,59,"Jerky RF Street Taco Pork Stick",15,45.0],[3,4,59,"Jerky RF Teriyaki Balboa 2oz",10,90.0],[3,4,59,"Jerky RF TuffleOBill",8,72.0],[3,4,59,"Justins ChocPB",18,63.0],[3,4,59,"Justins Dark PB Cup",20,70.0],[3,4,59,"Killer brownie Chocolate",22,66.0],[3,4,59,"Killer brownie Kitchen sink",10,30.0],[3,4,59,"Kind Bar Cran Alm",30,90.0],[3,4,59,"Kind Bar Crml Almd SSlt",7,21.0],[3,4,59,"Kind Bar Dark Choc Cherry",18,54.0],[3,4,59,"Kind Bar FruitNut",10,30.0],[3,4,59,"Kind Bar PB Dk Choc",41,123.0],[3,4,59,"Kind DarkChocNutsSalt",19,57.0],[3,4,59,"Kind Kind Bar SaltCarDarkChoc",36,108.0],[3,4,59,"Kinder Bueno Bar",124,372.0],[3,4,59,"Lenny & Larry Protein Pretz Everything",15,60.0],[3,4,59,"Lenny & Larry complete Choc cookie",9,45.0],[3,4,59,"Lenny & Larry complete Vanilla cookie",9,45.0],[3,4,59,"Lind CM Caramel",17,13.6],[3,4,59,"Lind CM Cookies & Cream",13,10.4],[3,4,59,"Lind CM Dark choc",19,15.2],[3,4,59,"Lind CM Milk choc",11,8.8],[3,4,59,"Lind CM White choc",38,30.4],[3,4,59,"Luna Bar Blueberry",13,39.0],[3,4,59,"Luna Bar Choc Coco",11,33.0],[3,4,59,"Luna Bar Lemonzest",23,69.0],[3,4,59,"Luna Bar Pprmnt Stick",32,96.0],[3,4,59,"MIXED FRUIT CUP",93,481.25],[3,4,59,"Made Good bites Choc Chip",23,115.0],[3,4,59,"Made Good bites Mixed Berry",16,80.0],[3,4,59,"Mate fruit bar Blueberry",23,34.5],[3,4,59,"Mate fruit bar Mango",47,70.5],[3,4,59,"Mate fruit bar Mixed berry",60,90.0],[3,4,59,"Mate fruit bar Pineapple",7,10.5],[3,4,59,"Mate fruit bar Strawberry",47,70.5],[3,4,59,"My Moch Cook Crea",19,38.0],[3,4,59,"My Moch Stra",16,32.0],[3,4,59,"My Moch Swee Mang",22,44.0],[3,4,59,"NELL HARD EGGS 2PK",12,30.0],[3,4,59,"NUTELLA GO BREADSTICKS",63,189.0],[3,4,59,"Nightingale icecream FS Banana",11,66.0],[3,4,59,"Nightingale icecream FS Choc french roas",4,24.0],[3,4,59,"Nightingale icecream FS Key lime",10,60.0],[3,4,59,"Nightingale icecream FS Straw shortcake",17,102.0],[3,4,59,"Nightingale mini Classic",20,70.0],[3,4,59,"Nightingale mini Cookie monster",22,77.0],[3,4,59,"Nutella Go Pretzel",45,180.0],[3,4,59,"Nutella Wafer 2pk B Ready 1.55oz",48,144.0],[3,4,59,"ONE Bar Reeses PB",21,84.0],[3,4,59,"OSMYR P3 HAM&CSHW",11,44.0],[3,4,59,"OSMYR P3 TRK&ALM",18,72.0],[3,4,59,"Oh Snap Carrot Cuties",3,12.0],[3,4,59,"Oh Snap Cool Beans",8,32.0],[3,4,59,"Oh Snap Cranberry",2,8.0],[3,4,59,"Oh Snap Dilly Bites",37,148.0],[3,4,59,"Oh Snap Hottie Bites",20,80.0],[3,4,59,"Oh Snap Sassy Bites",18,72.0],[3,4,59,"One Bar Blueberry Cobbler",23,92.0],[3,4,59,"One Bar Cinnamon roll",30,120.0],[3,4,59,"One Bar Glazed Donut",15,60.0],[3,4,59,"POCKY CHOC BISC",63,220.5],[3,4,59,"POCKY Cookies & Cream",35,122.5],[3,4,59,"POCKY MATCHA",41,143.5],[3,4,59,"POCKY STRAWBERRY",37,129.5],[3,4,59,"Pears Churro almonds",8,24.0],[3,4,59,"Pears Everything Bagel cashews",10,30.0],[3,4,59,"Pears Honey Chipotle peanuts",4,12.0],[3,4,59,"Pears PB Cup peanuts",6,18.0],[3,4,59,"Pirate Booty",43,215.0],[3,4,59,"Port city pretz Cinn sugar",26,130.0],[3,4,59,"Port city pretz Fiesty hot",15,75.0],[3,4,59,"Port city pretz Mustard honey",15,75.0],[3,4,59,"Port city pretz Ranch dill",20,100.0],[3,4,59,"Preserves Apricot",1,10.0],[3,4,59,"Preserves Fig",1,10.0],[3,4,59,"Pretzel Cris Original",41,112.75],[3,4,59,"Pretzel cris Buff Wing",34,93.5],[3,4,59,"Pretzel cris hone must",14,38.5],[3,4,59,"Pretzel crisp Everthing 3oz",30,83.7],[3,4,59,"Pro Bar Base",18,81.0],[3,4,59,"Pro Bar Meal on go Ban Nut",13,61.75],[3,4,59,"Pro Bar PB",11,52.25],[3,4,59,"Recess Blood Orange",11,38.5],[3,4,59,"Roltini Pepperoni",36,108.0],[3,4,59,"Roltini Pros Mozz",99,297.0],[3,4,59,"Roltini Salami Mozz",32,96.0],[3,4,59,"SWOFFLE FRNCH VNL",24,84.0],[3,4,59,"Sargento Ched Alm Cran",46,115.0],[3,4,59,"Sargento MontJack Wheat Thin",55,137.5],[3,4,59,"Sargento PeppJack Ritz",52,130.0],[3,4,59,"Scoot frozen lemonade",3,9.0],[3,4,59,"Scoot frozen strawberry",3,9.0],[3,4,59,"SkinDipp Almo DK Choc PB (1.2oz)",17,55.25],[3,4,59,"SkinDippAlmo Dark Choc Coco (1.2oz)",19,61.75],[3,4,59,"Snap Calb Lite Salt",24,84.0],[3,4,59,"Snap Calb Red Lentil",15,52.5],[3,4,59,"Snap Calb Zesty Ranch",8,28.0],[3,4,59,"Swoffle Caramel",31,108.5],[3,4,59,"Swoffle Chocolate Caramel",13,45.5],[3,4,59,"Tastelli drink jelly AppleGrape",61,213.5],[3,4,59,"Tastelli drink jelly Lychee",131,458.5],[3,4,59,"Tastelli drink jelly MangoPineapple",132,462.0],[3,4,59,"UnReal Dark Choc PB cup",19,152.0],[3,4,59,"Undercover Quin Dark choc cherry",12,66.0],[3,4,59,"Undercover Quin Milk Choc",31,170.5],[3,4,59,"Undercover Quinoa DC Sea Salt",29,159.5],[3,4,59,"Uniq Spli pret extr dark",5,30.0],[3,4,59,"Uniq Spli pret extr salt",9,54.0],[3,4,59,"Uniq Spli pret orig",16,96.0],[3,4,59,"Uniq Spli pret shel",5,30.0],[3,4,59,"Uniq Spli pret sour Douh ring",4,22.0],[3,4,59,"Uniq puff Hone Must",5,30.0],[3,4,59,"Uniq puff aged ched",6,35.94],[3,4,59,"Unreal CM Caramel Peanut .67oz",28,35.0],[3,4,59,"Unreal CM Coconut .53oz",16,20.0],[3,4,59,"Unreal Chocolate Gems 1.3oz",15,52.5],[3,4,59,"Unreal DKChoc wquinaoa",20,160.0],[3,4,59,"Unreal dark choc peanut 1.5oz",26,91.0],[3,4,59,"Vrmnt Assorted Prtzl",22,241.78],[3,4,59,"Vrmnt Choc Prtzl",51,560.49],[3,4,59,"Vrmnt Dark Prtzl",21,230.79],[3,4,59,"WNDRFL PST S&P 1.25",27,67.5],[3,4,59,"WNDRFL Pist",10,25.0],[3,4,59,"WNDRFL Swt Chili",6,15.0],[3,4,59,"Welchs Mixed 5oz",68,272.0],[3,4,59,"Welchs berries n cherries 5oz",52,208.0],[3,4,59,"Welchs mango peach 5oz",37,148.0],[3,4,59,"Wholly Guacamole 2oz",7,17.5],[3,4,59,"Wond Pist 5oz bag",20,140.0],[4,1,29,"Cold Brew Black Tie 12oz",5,23.75],[4,1,29,"Cold Brew Black Tie 16oz",14,73.5],[4,1,29,"Cold Brew Black Tie 24oz",21,120.75],[4,1,29,"Cold Brew Oat Latte 12oz",1,5.0],[4,1,29,"Cold Brew Oat Latte 16oz",10,52.0],[4,1,29,"Cold Brew Oat Latte 24oz",4,22.5],[4,1,29,"ColdBrew Peets 12oz",26,122.5],[4,1,29,"ColdBrew Peets 16oz",51,265.0],[4,1,29,"ColdBrew Peets 24oz",74,409.5],[4,1,29,"Frapp Coffee Peets 12oz",2,11.5],[4,1,29,"Frapp Coffee Peets 16oz",1,6.25],[4,1,29,"Frapp Espresso Peets 16oz",1,6.75],[4,1,29,"Frapp Matcha Peets 24oz",2,13.0],[4,1,29,"Iced Americano 12oz",4,24.0],[4,1,29,"Iced Americano 16oz",10,65.0],[4,1,29,"Iced Americano 24oz",8,56.0],[4,1,29,"Iced Coffee 16oz",7,30.25],[4,1,29,"Iced Coffee 20oz",1,5.25],[4,1,29,"Iced Coffee 24oz",5,27.25],[4,1,29,"Iced Latte 12oz",81,470.75],[4,1,29,"Iced Latte 16oz",278,1747.25],[4,1,29,"Iced Latte 20oz",7,44.0],[4,1,29,"Iced Latte 24oz",158,1067.0],[4,1,29,"Iced Latte Chai 12oz",27,159.0],[4,1,29,"Iced Latte Chai 16oz",110,726.0],[4,1,29,"Iced Latte Chai 20oz",2,13.5],[4,1,29,"Iced Latte Chai 24oz",72,527.5],[4,1,29,"Iced Latte Matcha 12oz",45,253.75],[4,1,29,"Iced Latte Matcha 16oz",229,1443.25],[4,1,29,"Iced Latte Matcha 20oz",3,19.5],[4,1,29,"Iced Latte Matcha 24oz",145,1018.5],[4,1,29,"Iced Macc Caramel 12oz",9,51.75],[4,1,29,"Iced Macc Caramel 16oz",27,172.25],[4,1,29,"Iced Macc Caramel 24oz",26,176.25],[4,1,29,"Iced Tea 12oz",1,3.0],[4,1,29,"Iced Tea 20oz",5,20.0],[4,1,29,"Iced Tea 24oz",2,9.0],[4,1,29,"Iced Tea-Lemonade 12oz",7,22.75],[4,1,29,"Iced Tea-Lemonade 16oz",11,41.25],[4,1,29,"Iced Tea-Lemonade 24oz",12,51.0],[4,1,29,"IcedTea MightyLeaf 12oz",3,9.0],[4,1,29,"Nitro Cold Brew 16oz",1,4.75],[4,1,29,"PEETS Iced Mocha 24oz",28,189.0],[4,1,29,"Sparkling Citrus Immunity 16oz",19,123.5],[4,1,29,"Sparkling Cold Brew 16oz",3,17.25],[4,1,29,"Sparkling Energy 20oz",8,44.0],[4,1,29,"Sparkling Gold Immunity 16oz",4,26.0],[4,1,29,"Sparkling Lemonade Blushing rose 16oz",8,44.0],[4,1,29,"Sparkling Lemonade Lavender 16oz",4,22.0],[4,1,30,"Americano 12oz",3,17.25],[4,1,30,"Americano 16oz",6,37.5],[4,1,30,"Americano 20oz",1,6.75],[4,1,30,"Cappuccino 12oz",18,84.0],[4,1,30,"Cappuccino 16oz",13,68.75],[4,1,30,"Cappuccino 20oz",13,79.0],[4,1,30,"Coffee 12oz",31,85.25],[4,1,30,"Coffee 16oz",26,84.5],[4,1,30,"Coffee 20oz",13,48.75],[4,1,30,"Espresso Double",24,87.0],[4,1,30,"Espresso Single",8,20.0],[4,1,30,"Havana Cappuccino 12oz",2,10.0],[4,1,30,"Havana Cappuccino 16oz",11,60.5],[4,1,30,"Havana Cappuccino 20oz",3,18.0],[4,1,30,"Horchata Cold Brew Oat Latte 12oz",5,26.25],[4,1,30,"Horchata Cold Brew Oat Latte 16oz",7,40.25],[4,1,30,"Horchata Cold Brew Oat Latte 24oz",10,62.5],[4,1,30,"Hot Chocolate 12oz",12,42.75],[4,1,30,"Hot Chocolate 16oz",18,73.5],[4,1,30,"Hot Chocolate 20oz",6,27.0],[4,1,30,"Latte 12oz",34,173.25],[4,1,30,"Latte 16oz",66,372.25],[4,1,30,"Latte 20oz",30,179.0],[4,1,30,"Latte Chai 12oz",17,92.25],[4,1,30,"Latte Chai 16oz",32,190.0],[4,1,30,"Latte Chai 20oz",10,60.5],[4,1,30,"Latte Matcha 12oz",9,47.5],[4,1,30,"Latte Matcha 16oz",13,76.25],[4,1,30,"Latte Matcha 20oz",11,68.5],[4,1,30,"Macchiato Caramel 12oz",10,50.0],[4,1,30,"Macchiato Caramel 16oz",11,63.25],[4,1,30,"Macchiato Caramel 20oz",3,18.75],[4,1,30,"PEETS Mocha 16oz",2,11.5],[4,1,30,"Shaker Fruit Tea 12oz",6,31.5],[4,1,30,"Shaker Fruit Tea 16oz",9,51.75],[4,1,30,"Shaker Fruit Tea 24oz",8,50.0],[4,1,30,"Tea Cam MightyLeaf 20oz",2,5.5],[4,1,30,"Tea Earl MightyLeaf 16oz",4,10.0],[4,1,30,"Tea GreenDrag MightyLeaf 16oz",2,5.0],[4,1,30,"Tea MightyLeaf 12oz",11,27.5],[4,1,30,"Tea MightyLeaf 20oz",2,7.1],[4,1,30,"TeaBag Chai MightyLeaf 16oz",3,7.5],[4,0,27,"Bar Rice Crisp",21,36.75],[4,0,27,"Bread Apple crumb slice",19,47.5],[4,0,27,"Bread Banana Choc Slice",23,57.5],[4,0,27,"Bread Blueberry Slice",27,67.5],[4,0,27,"Bread Pumpkin Cheese Slice",16,40.0],[4,0,27,"Brownie",56,112.0],[4,0,27,"Cookie Choc Chip",33,82.5],[4,0,27,"Cookie Churro salted carml 2.5oz",4,10.0],[4,0,27,"Cookie Triple Chocolate",10,25.0],[4,0,27,"Cookies Lg",1,2.5],[4,0,27,"Croissant Butter mini",9,18.0],[4,0,27,"Croissant Chocolate mini",7,14.0],[4,0,27,"Croissant Chocolate mini",23,46.0],[4,0,27,"Croissant mini",22,44.0],[4,0,27,"Danish Apple mini",3,6.0],[4,0,27,"Danish Blueberry",11,22.0],[4,0,27,"Danish Cheese mini",21,42.0],[4,0,27,"Danish. Raspberry",14,28.0],[4,0,28,"Bacon Croissant",45,337.5],[4,0,28,"Breakfast Croissant Bacon",10,75.0],[4,0,28,"Breakfast Croissant No Bac",14,91.0],[4,0,28,"Veggie Croissant",14,91.0],[4,0,31,"Hot Sandwich 3 Cheese Panini",34,323.0],[4,0,31,"Hot Sandwich BBQ Chicken",31,310.0],[4,0,31,"Hot Sandwich Chicken Ciabatta",30,300.0],[4,0,31,"Hot Sandwich Italian",32,320.0],[4,0,31,"New Orleans Italian Sandwich",3,28.5],[4,4,52,"Salad Driscoll Berry",2,17.5],[4,4,52,"Salad POC Chix Caes",9,85.5],[4,4,52,"Sand Buff Chix Wrap",9,74.25],[4,4,52,"Sand Chix Mozz",7,61.25],[4,4,52,"Sand Hummus Veg on wheat",4,26.0],[4,4,52,"Sand Turk Croiss",5,40.0],[4,4,52,"Sand Turk GF",3,21.0],[4,4,52,"Sand Turk Pest",8,76.0],[4,4,52,"Sandwich Tuna",8,42.0],[4,4,49,"Flrt Berry Tampting",3,12.0],[4,4,49,"Flrt Guava Lava",8,32.0],[4,4,49,"Monster Vanilla",9,36.0],[4,4,51,"Canada Dry20Btl",2,5.0],[4,4,51,"Coke 20Btl",1,2.5],[4,4,51,"CorePwr Prot Choc 14Oz",5,30.0],[4,4,51,"CorePwr Prot Choc Elit 14Oz",13,84.5],[4,4,51,"CorePwr Prot Vani 14Oz",1,6.0],[4,4,51,"DIET COKE 20Btl",13,32.5],[4,4,51,"Dasani 20",8,32.0],[4,4,51,"MinMaid Lemonade 20oz",3,9.0],[4,4,51,"MinMaid Orange 15.2",4,12.0],[4,4,51,"Minmde Pnk Lemnde 20oz",4,12.0],[4,4,51,"Powerade mtn berry blast",8,22.0],[4,4,51,"Vitamin Wtr AC BB Pom",5,13.5],[4,4,51,"Vitamin Wtr Drgnfruit",5,15.0],[4,4,55,"Smartwater 20oz",34,85.0],[4,4,57,"Gold Peak Sweet Tea 18oz",5,15.0],[4,4,58,"Topo Chico Passion fruit 12oz",11,30.25],[4,4,59,"MIXED FRUIT CUP",20,110.0],[5,2,33,"Bar Blondie",1,2.25],[5,2,33,"Bread Banana walnut slice",46,115.0],[5,2,33,"Lemon Zucchini Bread",27,67.5],[5,2,33,"Pumpkin Cheese Bread",27,67.5],[5,2,34,"Cannoli",1,2.5],[5,2,34,"Cinnamon Roll",19,28.5],[5,2,34,"Cookie Nutella",7,17.5],[5,2,34,"Croissant Mini",124,248.0],[5,2,36,"Bread Banana walnut slice",69,172.5],[5,2,36,"Lemon Zucchini Bread",28,70.0],[5,2,36,"Pumpkin Cheese Bread",14,35.0],[5,2,40,"Cookie Nutella",47,117.5],[5,2,40,"Cookie Oat Butrsctch",2,1.5],[5,2,40,"Cookie Toffee shortbrd",7,17.5],[5,1,35,"Simply Juice 11z",2,6.0],[5,1,35,"UMass Water",11,16.5],[5,1,38,"Iced Americano 20oz",47,224.0],[5,1,38,"Iced Coffee 20oz",251,1215.0],[5,1,38,"Iced Latte 20oz",911,5878.5],[5,1,38,"Iced Latte 24oz",7,49.25],[5,1,38,"Iced Latte Chai 20oz",136,848.5],[5,1,38,"Iced Macc Caramel 24oz",3,20.25],[5,1,38,"Iced Tea 20oz",5,20.75],[5,1,43,"Americano 12oz",48,180.0],[5,1,43,"Americano 16oz",23,102.5],[5,1,43,"Cafe Au Lait 16oz",1,5.0],[5,1,43,"Cafe Au Lait 20oz",1,5.5],[5,1,43,"Cappuccino 12oz",68,315.0],[5,1,43,"Cappuccino 16oz",40,205.75],[5,1,43,"CarmSeaLatte Sm",1,5.0],[5,1,43,"Coffee 12oz",219,610.0],[5,1,43,"Coffee 16oz",125,411.25],[5,1,43,"Coffee Decaf 12oz",5,13.75],[5,1,43,"Coffee Decaf 16oz",1,3.25],[5,1,43,"Espresso Double",71,248.5],[5,1,43,"Espresso Single",20,50.0],[5,1,43,"Flavor Shot",2,1.5],[5,1,43,"Hot Chocolate 12oz",41,145.75],[5,1,43,"Hot Chocolate 16oz",19,79.0],[5,1,43,"Hot Steam Mlk Lg",1,3.25],[5,1,43,"Hot Steam Mlk Sm",5,13.75],[5,1,43,"Hot Tea 12oz",36,108.0],[5,1,43,"Latte 12oz",213,1066.0],[5,1,43,"Latte 16oz",207,1136.0],[5,1,43,"Latte Chai 12oz",41,208.5],[5,1,43,"Latte Chai 16oz",38,219.75],[5,0,32,"Bagel",7,17.5],[5,0,32,"Bagel Egg Chs and Meat",8,30.32],[5,0,32,"Bagel Everything",13,44.5],[5,0,32,"Bagel Onion",5,17.5],[5,0,32,"Bagel Plain",8,27.5],[5,0,32,"Bagel Sesame",3,9.5],[5,0,32,"Bagel and Butter",2,6.5],[5,0,32,"Bagel and CC",25,100.0],[5,0,37,"Add Bacon",7,22.75],[5,0,37,"Add Cheese",11,16.5],[5,0,37,"Add Cream Cheese",16,16.0],[5,0,37,"Add Egg",14,24.5],[5,0,37,"Add Guac",9,22.5],[5,0,37,"Add Peanut Butter",4,4.0],[5,0,37,"Bacon Croissant",87,587.25],[5,0,37,"PeoplesBfstCrois",4,19.0],[5,0,37,"Veggie Croissant",38,199.5],[5,0,39,"COLD Mediterranean Falafel Hummus Sand",1,10.5],[5,0,39,"Southeast Asian Roast Beef Sandwich",1,11.25],[5,0,41,"Turkey Bacon Ciabatta",53,596.25],[5,0,42,"Bagel Egg and Cheese",3,15.75],[5,0,42,"COLD Mediterranean Falafel Hummus Sand",2,21.0],[5,0,42,"Chicken Bacon Ranch Grilled Cheese",74,777.0],[5,0,42,"Cubano Croissant",16,168.0],[5,0,42,"HOT Mediterranean Falafel Hummus Sand",15,157.5],[5,0,42,"Italian ciabatta banana pepper aioli",34,382.5],[5,0,42,"POC Soutwest Bagel sand",71,443.75],[5,0,42,"POC Traditional Bagel sand",186,1069.5],[5,0,42,"POC Wake Up Bagel sand",174,1174.5],[5,0,42,"Southeast Asian Roast Beef Sandwich",13,146.25],[5,0,44,"Cubano Croissant",19,199.5],[5,0,44,"HOT Mediterranean Falafel Hummus Sand",18,189.0],[5,0,44,"Italian ciabatta banana pepper aioli",16,180.0],[5,0,44,"South East Asian Roast Beef",17,191.25],[5,0,44,"Spicy Chicken on Biscuit",2,18.0],[5,0,45,"Hash Browns",5,15.0],[5,0,46,"Fruit Cup",1,5.0],[5,0,46,"Hand Fruit",1,1.25],[5,4,55,"Driscolls Blueberry 1pt",2,12.0],[5,4,55,"Driscolls Raspberry 6oz",2,9.0],[5,4,55,"Driscolls Strawberry 16oz",1,5.5],[6,1,60,"Fountain Drink",637,955.5],[6,0,61,"Add Bangkok Beef",7,43.75],[6,0,61,"Add Beef wPeppers & Onion",1,6.25],[6,0,61,"Add Chx Green Curry",1,5.75],[6,0,61,"Add Chx Orange",87,500.25],[6,0,61,"Add Chx Thai BBQ",17,97.75],[6,0,61,"Add Kung Pao Tofu",4,23.0],[6,0,61,"Add Thai Red Curry",1,5.75],[6,0,61,"Add Vietnamese Chicken Curry",1,5.75],[6,0,61,"Add White Rice",10,25.0],[6,0,61,"Add Xiu Mai Tofu",2,11.5],[6,0,61,"Chicken Potstickers (2)",457,1371.0],[6,0,61,"Green Beans",6,25.5],[6,0,61,"Jungle Curry",1,5.75],[6,0,61,"Rice Brown",2,5.0],[6,0,61,"Sesame Greens",8,34.0],[6,0,61,"Tofu Side",2,11.5],[6,0,61,"Veg Springroll",178,890.0],[6,0,62,"Apple",35,43.75],[6,0,62,"Banana",7,8.75],[6,0,63,"Pho BeefChx broth",407,5087.5],[6,0,63,"Pho BeefCurry broth",5,62.5],[6,0,63,"Pho BeefVeg broth",2,25.0],[6,0,63,"Pho ChxChx broth",289,3323.5],[6,0,63,"Pho ChxCurry broth",14,161.0],[6,0,63,"Pho ChxVeg broth",2,23.0],[6,0,63,"Pho TofuBeef broth",3,34.5],[6,0,63,"Pho TofuChx broth",5,57.5],[6,0,63,"Pho TofuVeg broth",108,1242.0],[6,0,64,"Bangkok Beef",91,1137.5],[6,0,64,"Beef wPeppers & Onion",1,12.5],[6,0,64,"Chx Green Curry",25,287.5],[6,0,64,"Chx Orange",1941,22321.5],[6,0,64,"Chx Thai BBQ",150,1725.0],[6,0,64,"Curry Special",4,46.0],[6,0,64,"Grill Special",8,92.0],[6,0,64,"Jungle Curry",6,69.0],[6,0,64,"Kung Pao Tofu",47,540.5],[6,0,64,"Thai Red Curry",3,34.5],[6,0,64,"Tofu Special",11,126.5],[6,0,64,"Vietnamese Chicken Curry",19,218.5],[6,0,64,"Wok Special",1,12.5],[6,0,64,"Xiu Mai Tofu",2,23.0],[7,1,67,"Fountain Drink",466,699.0],[7,1,74,"UMass Water",2,3.0],[7,0,65,"Beef Bowl",762,10516.0],[7,0,65,"Chicken Bowl",975,13100.0],[7,0,65,"Lentil Bowl",155,1904.0],[7,0,65,"Pork Bowl",242,3141.0],[7,0,66,"Beef Burrito",402,5300.5],[7,0,66,"Chicken Burrito",405,5023.5],[7,0,66,"Lentil Burrito",78,934.25],[7,0,66,"Pork Burrito",121,1511.0],[7,0,68,"Combo w Chips",33,90.75],[7,0,68,"Combo w Fruit",2,3.5],[7,0,69,"Beef Nachos",19,249.25],[7,0,69,"Chicken Nachos",27,360.25],[7,0,69,"Lentil Nachos",9,115.0],[7,0,69,"Loaded Nachos",104,1359.75],[7,0,69,"Pork Nachos",7,84.25],[7,0,70,"Beef Quesadilla",71,921.5],[7,0,70,"Cheese Quesadilla",19,221.0],[7,0,70,"Chicken Quesadilla",1,11.0],[7,0,70,"Chicken Quesadilla",131,1626.0],[7,0,70,"Lentil Quesadilla",17,206.75],[7,0,70,"Pork Quesadilla",15,183.5],[7,0,71,"Marinated Beef Salad",2,33.25],[7,0,71,"Marinated Chicken Salad",6,72.0],[7,0,71,"Spiced Lentil Salad",2,26.5],[7,0,72,"Chips & Salsa",65,162.5],[7,0,72,"Side of Brown Rice",2,5.0],[7,0,72,"Side of Guacamole",12,36.0],[7,0,72,"Side of Queso",14,59.5],[7,0,72,"Side of White Rice",4,10.0],[7,0,73,"Apple",14,17.5],[7,0,73,"Banana",6,7.5],[8,1,75,"Fountain Drink",2,3.0],[8,1,75,"Fountain Drink",465,697.5],[8,0,76,"Bowl Hummus Beef",27,336.25],[8,0,76,"Bowl Hummus Chicken",184,2223.25],[8,0,76,"Bowl Hummus Falafel",86,1035.25],[8,0,76,"Bowl Hummus Lamb",57,698.25],[8,0,76,"Salad Beef Tavola",16,196.0],[8,0,76,"Salad Chicken Tavola",67,816.0],[8,0,76,"Salad Falafel Tavola",32,384.0],[8,0,76,"Salad Lamb Tavola",19,232.75],[8,0,76,"Wrap Beef Mediter",44,539.0],[8,0,76,"Wrap Chicken Mediter",219,2628.0],[8,0,76,"Wrap Falafel Mediter",130,1560.0],[8,0,76,"Wrap Lamb Mediter",75,918.75],[8,0,77,"Pasta Chicken Alfredo",444,5328.0],[8,0,77,"Pasta Sausage Spicy",193,2316.0],[8,0,77,"Pasta Veggie Alfredo",49,514.5],[8,0,78,"Pizza Pepperoni 16 inch",1,20.0],[8,0,79,"Pizza Meat Specialty",65,373.75],[8,0,79,"Pizza Veggie Slice",29,152.25],[8,0,80,"Beef Skewer",19,114.0],[8,0,80,"Chicken Skewer",214,1230.5],[8,0,80,"Dolma",13,42.25],[8,0,80,"Falafel",8,44.0],[8,0,80,"Hummus",1,3.5],[8,0,80,"Lamb Skewer",19,114.0],[8,0,80,"Local Greens",1,1.0],[8,0,80,"Olives",2,5.0],[8,0,80,"Pita",23,63.25],[8,0,81,"Apple",16,20.0],[8,0,81,"Banana",30,37.5],[9,1,83,"Fountain Drink",597,895.5],[9,1,83,"UMass Water",1,2.0],[9,0,82,"Rice",2,5.0],[9,0,84,"Add Mariniated Tuna",2,16.5],[9,0,84,"Add Salmon",5,41.25],[9,0,84,"Bowl Poke",319,4113.5],[9,0,84,"Bowl Spicy Salmon",477,6065.75],[9,0,84,"Bowl Spicy Tuna",110,1416.75],[9,0,84,"Donburi Bluewall",160,2029.75],[9,0,84,"Donburi Chx Katsu",577,7355.0],[9,0,84,"Donburi Chx Teriyaki",136,1733.5],[9,0,84,"Donburi Pork Katsu",93,1172.0],[9,0,84,"Plant based Bulgogi Don",28,321.0],[9,0,84,"Sushi Roll Alaskan",188,1755.75],[9,0,84,"Sushi Roll California",108,918.0],[9,0,84,"Sushi Roll Paradise",395,4566.0],[9,0,84,"Sushi Roll Pink Panther",115,1275.25],[9,0,84,"Sushi Roll Rainbow",86,999.75],[9,0,84,"Sushi Roll Red Dragon",57,637.0],[9,0,84,"Sushi Roll Spicy Tuna",125,1161.25],[9,0,84,"Sushi Roll Sweet Potato Tempura",57,441.75],[9,0,84,"Sushi Roll Tiger",94,1082.75],[9,0,84,"Sushi Roll Veggie",64,500.25],[9,0,85,"Extra Avocado Wasabi",1,2.5],[9,0,86,"Rice Jasmine",7,17.5],[9,0,86,"Rice Sushi",11,27.5],[9,0,86,"Salad Seaweed",34,161.5],[9,0,86,"Soup Miso",215,537.5],[9,0,86,"Tempura Veggie",97,242.5],[9,0,87,"Add Edamame",57,256.5],[9,0,87,"Apple",24,30.0],[9,0,87,"Banana",13,16.25],[10,1,90,"Fountain Drink",2,3.0],[10,1,93,"Gelato Frappe",119,862.75],[10,1,93,"Gelato Frizzante",7,50.75],[10,1,93,"Gelato Smoothie",2,14.5],[10,0,88,"Choc Masc CC Dome",82,430.5],[10,0,88,"NY CC Dome",65,341.25],[10,0,88,"Seasonal CC Dome",124,651.0],[10,0,89,"Alt Flour Cookie",17,29.75],[10,0,89,"Bakers Dz Cookies",1,12.0],[10,0,89,"Bar Rice Crisp",28,56.0],[10,0,89,"Bar Vegan",35,140.0],[10,0,89,"Bars",101,353.5],[10,0,89,"Brownie Alt Flour",6,24.0],[10,0,89,"Brownie Fudge Drop",413,1652.0],[10,0,89,"Brownie Vegan",15,60.0],[10,0,89,"Cookie",393,589.5],[10,0,89,"Cookie Alt Flour",16,28.0],[10,0,89,"Cupcake Fros (Almo Amar Crm Chs)",68,272.0],[10,0,89,"Cupcakes",228,684.0],[10,0,89,"Lg Snack Cake Alt Flour",31,155.0],[10,0,89,"Novelty Cupcake",45,168.75],[10,0,89,"Sm Snack Cake Alt Flour",2,8.0],[10,0,89,"Vegan Cookie",45,78.75],[10,0,89,"Vegan Cupcake",8,30.0],[10,0,89,"Vegan Whoopie",13,52.0],[10,0,91,"Assorted Macaron",295,590.0],[10,0,91,"Baklava",58,188.5],[10,0,91,"Cannoli",265,662.5],[10,0,91,"Eclair",44,198.0],[10,0,91,"Specialty Cannoli",41,123.0],[10,0,91,"Tiramisu",160,840.0],[10,0,91,"Whoopie Pie",122,488.0],[10,0,91,"Whoopie Pie Pumpkin Alt Flour",12,48.0],[10,0,92,"Grande",28,196.0],[10,0,92,"Medio",142,852.0],[10,0,92,"Piccolo",568,2840.0],[10,0,92,"Waffle Cone",54,324.0],[10,0,94,"Cake 6 inch",46,828.0],[10,0,94,"Cake Cookie 10 inch",1,17.0],[10,0,94,"Cake Half Sheet",1,55.0],[10,0,94,"Cake Pick",1,2.5],[10,0,94,"Pack Candles",6,24.0],[10,0,94,"Single Candle",11,11.0]],"recon":{"sales":458238.01,"coupon":7716.71,"tax":1754.25,"grand":452275.55},"fname":"10-04-2026 to 10-10-2026"};
+(function(){
+"use strict";
+const L=DATA.locs, C=DATA.cats, S=DATA.subs, ROWS=DATA.rows;
+const fmt$=v=>"$"+Math.round(v).toLocaleString("en-US");
+const fmt$2=v=>"$"+v.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmtN=v=>Math.round(v).toLocaleString("en-US");
+const fmtP=v=>(v*100).toFixed(1)+"%";
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=id=>document.getElementById(id);
+const WEEK_TOTAL=ROWS.reduce((a,r)=>a+r[5],0);
+
+// pair subcategory labels (static)
+const pairSubs={};
+ROWS.forEach(r=>{const k=r[0]+"|"+r[3];(pairSubs[k]=pairSubs[k]||new Set()).add(S[r[2]]);});
+
+const st={mode:"all",mix:L.map(()=>true),cat:"All categories",sub:"All sub-categories",view:"Top",show:10,by:"sales"};
+const locOn=i=>st.mode==="all"?true:st.mode==="custom"?st.mix[i]:st.mode===i;
+
+$("week").textContent=DATA.week;
+
+// ---------- tiles ----------
+function buildTiles(){
+  const t=$("tiles"); t.innerHTML="";
+  L.forEach((name,i)=>{
+    const d=document.createElement("div"); d.className="tile";
+    d.innerHTML=`<button class="loc" aria-pressed="false" title="Show ${esc(name)} only"><span class="dot"></span>${DATA.icons[i]} ${esc(name)}</button>
+      <div class="yn" role="group" aria-label="Include ${esc(name)} in custom mix"><button class="yes">Yes</button><button class="no">No</button></div>`;
+    d.querySelector(".loc").onclick=()=>{st.mode=i;render();};
+    d.querySelector(".yes").onclick=()=>{st.mix[i]=true;st.mode="custom";render();};
+    d.querySelector(".no").onclick=()=>{st.mix[i]=false;st.mode="custom";render();};
+    t.appendChild(d);
+  });
+  const m=document.createElement("div"); m.className="tile mode";
+  m.innerHTML=`<button class="loc" id="m-all">🌐 All locations</button><button class="loc" id="m-custom">🧩 Custom mix</button>`;
+  t.appendChild(m);
+  $("m-all").onclick=()=>{st.mode="all";render();};
+  $("m-custom").onclick=()=>{st.mode="custom";render();};
+}
+function paintTiles(){
+  const tiles=[...document.querySelectorAll("#tiles .tile:not(.mode)")];
+  tiles.forEach((d,i)=>{
+    const on=locOn(i);
+    d.classList.toggle("on",on); d.classList.toggle("off",!on); d.classList.toggle("only",st.mode===i);
+    d.querySelector(".loc").setAttribute("aria-pressed",st.mode===i);
+    d.querySelector(".yes").setAttribute("aria-pressed",st.mix[i]);
+    d.querySelector(".no").setAttribute("aria-pressed",!st.mix[i]);
+  });
+  const mt=document.querySelector("#tiles .tile.mode");
+  $("m-all").style.cssText=st.mode==="all"?"background:var(--navy);color:#fff":"";
+  $("m-custom").style.cssText=st.mode==="custom"?"background:var(--navy);color:#fff":"";
+  $("m-all").setAttribute("aria-pressed",st.mode==="all");
+  $("m-custom").setAttribute("aria-pressed",st.mode==="custom");
+}
+
+// ---------- SVG charts ----------
+const NS="http://www.w3.org/2000/svg";
+function svg(w,h){return `<svg viewBox="0 0 ${w} ${h}" role="img" xmlns="${NS}">`;}
+function colChart(el,labels,vals,colors,{fmt=fmt$,h=300,faded=[]}={}){
+  const W=640,H=h,top=24,bottom=64,left=8,right=8;
+  const max=Math.max(...vals,0)||1, n=labels.length, slot=(W-left-right)/n, bw=slot*0.62;
+  let s=svg(W,H);
+  s+=`<line x1="${left}" x2="${W-right}" y1="${H-bottom}" y2="${H-bottom}" stroke="var(--line)"/>`;
+  labels.forEach((lab,i)=>{
+    const v=vals[i], bh=(H-top-bottom)*v/max, x=left+slot*i+(slot-bw)/2, y=H-bottom-bh;
+    const op=faded[i]?0.18:1;
+    if(v>0){
+      s+=`<rect x="${x}" y="${y}" width="${bw}" height="${bh}" rx="2" fill="${Array.isArray(colors)?colors[i]:colors}" opacity="${op}"><title>${esc(lab)}: ${fmt(v)}</title></rect>`;
+      s+=`<text class="lbl" x="${x+bw/2}" y="${y-6}" font-size="11" text-anchor="middle">${fmt(v)}</text>`;
+    }
+    const words=String(lab).split(" "), cx=left+slot*i+slot/2;
+    const lines=words.length>1&&lab.length>9?[words.slice(0,Math.ceil(words.length/2)).join(" "),words.slice(Math.ceil(words.length/2)).join(" ")]:[lab];
+    lines.forEach((ln,j)=>{s+=`<text class="axis" x="${cx}" y="${H-bottom+16+j*13}" font-size="11" text-anchor="middle" opacity="${faded[i]?0.5:1}">${esc(ln)}</text>`;});
+  });
+  el.innerHTML=s+"</svg>";
+}
+function barChart(el,labels,vals,color){
+  if(!labels.length){el.innerHTML='<div class="empty">No items match the current selection.</div>';return;}
+  const W=640,rowH=28,top=6,lw=230,right=78,H=top*2+rowH*labels.length;
+  const max=Math.max(...vals)||1;
+  let s=svg(W,H);
+  labels.forEach((lab,i)=>{
+    const y=top+i*rowH, bw=(W-lw-right)*vals[i]/max;
+    const t=lab.length>34?lab.slice(0,33)+"…":lab;
+    s+=`<text class="axis" x="${lw-8}" y="${y+rowH/2+4}" font-size="11.5" text-anchor="end">${esc(t)}<title>${esc(lab)}</title></text>`;
+    s+=`<rect x="${lw}" y="${y+5}" width="${Math.max(bw,1)}" height="${rowH-10}" rx="2" fill="${color}"><title>${esc(lab)}: ${fmt$2(vals[i])}</title></rect>`;
+    s+=`<text class="lbl" x="${lw+bw+6}" y="${y+rowH/2+4}" font-size="11">${fmt$(vals[i])}</text>`;
+  });
+  s+=`<line x1="${lw}" x2="${lw}" y1="${top}" y2="${H-top}" stroke="var(--line)"/>`;
+  el.innerHTML=s+"</svg>";
+}
+function pieChart(el,labels,vals,colors,{valFmt=fmt$}={}){
+  const tot=vals.reduce((a,b)=>a+b,0);
+  if(!tot){el.innerHTML='<div class="empty">No sales for the current selection.</div>';return;}
+  const W=320,H=300,cx=160,cy=150,r=135;
+  let s=svg(W,H), a0=-Math.PI/2;
+  vals.forEach((v,i)=>{
+    if(v<=0)return;
+    const frac=v/tot, a1=a0+frac*2*Math.PI;
+    if(frac>0.9999){s+=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="${colors[i]}"><title>${esc(labels[i])}: ${valFmt(v)} (100%)</title></circle>`;}
+    else{
+      const large=a1-a0>Math.PI?1:0;
+      const x0=cx+r*Math.cos(a0),y0=cy+r*Math.sin(a0),x1=cx+r*Math.cos(a1),y1=cy+r*Math.sin(a1);
+      s+=`<path d="M${cx},${cy} L${x0},${y0} A${r},${r} 0 ${large} 1 ${x1},${y1} Z" fill="${colors[i]}" stroke="var(--surface)" stroke-width="2"><title>${esc(labels[i])}: ${valFmt(v)} (${fmtP(frac)})</title></path>`;
+    }
+    if(frac>=0.05){
+      const am=(a0+a1)/2, lr=frac>0.9999?0:r*0.66;
+      s+=`<text x="${cx+lr*Math.cos(am)}" y="${cy+lr*Math.sin(am)+4}" font-size="12" font-weight="700" text-anchor="middle" style="fill:#fff">${fmtP(frac)}</text>`;
+    }
+    a0=a1;
+  });
+  s+="</svg>";
+  let lg='<div class="legend">';
+  labels.forEach((lab,i)=>{if(vals[i]<=0)return;lg+=`<div class="row"><span><span class="sw" style="background:${colors[i]}"></span>${esc(lab)}</span><b>${valFmt(vals[i])} · ${fmtP(vals[i]/tot)}</b></div>`;});
+  el.innerHTML=`<div class="pie-wrap"><div>${s}</div>${lg}</div></div>`;
+}
+
+// ---------- compute ----------
+function compute(){
+  const catOK=r=>st.cat==="All categories"||C[r[1]]===st.cat;
+  const subOK=r=>st.sub==="All sub-categories"||S[r[2]]===st.sub;
+  const pairs=new Map(); const locSales=L.map(()=>0); const catSales=C.map(()=>0); const subAvail=new Set();
+  ROWS.forEach(r=>{
+    if(!locOn(r[0]))return;
+    catSales[r[1]]+=r[5];
+    if(!catOK(r))return;
+    subAvail.add(r[2]);
+    if(!subOK(r))return;
+    locSales[r[0]]+=r[5];
+    const k=r[0]+"|"+r[3];
+    let p=pairs.get(k); if(!p){p={loc:r[0],item:r[3],sales:0,units:0};pairs.set(k,p);}
+    p.sales+=r[5]; p.units+=r[4];
+  });
+  const items=[...pairs.values()].filter(p=>p.sales>0);
+  return {items,locSales,catSales,subAvail};
+}
+
+// ---------- controls ----------
+function fillSelect(sel,opts,val){
+  sel.innerHTML=opts.map(o=>`<option value="${esc(o.v)}"${String(o.v)===String(val)?" selected":""}>${esc(o.t)}</option>`).join("");
+}
+$("sel-cat").onchange=e=>{st.cat=e.target.value;render();};
+$("sel-sub").onchange=e=>{st.sub=e.target.value;render();};
+$("sel-show").onchange=e=>{st.show=e.target.value==="all"?"all":+e.target.value;render();};
+document.querySelectorAll("#seg-view button").forEach(b=>b.onclick=()=>{st.view=b.dataset.v;render();});
+document.querySelectorAll("#seg-by button").forEach(b=>b.onclick=()=>{st.by=b.dataset.v;render();});
+
+// ---------- render ----------
+function render(){
+  paintTiles();
+  const {items,locSales,catSales,subAvail}=compute();
+  const nLoc=L.filter((_,i)=>locOn(i)).length;
+  const tSales=items.reduce((a,p)=>a+p.sales,0), tUnits=items.reduce((a,p)=>a+p.units,0);
+  $("k-sales").textContent=fmt$(tSales);
+  $("k-sales-sub").textContent=fmtP(tSales/WEEK_TOTAL)+" of Blue Wall week total";
+  $("k-units").textContent=fmtN(tUnits);
+  $("k-units-sub").textContent=nLoc+(nLoc===1?" location":" locations")+" in view";
+  $("k-items").textContent=fmtN(items.length);
+  $("fnote").textContent=(st.cat==="All categories"?"All categories":st.cat)+"  ›  "+(st.sub==="All sub-categories"?"All sub-categories":st.sub);
+
+  // controls
+  fillSelect($("sel-cat"),["All categories",...C].map(v=>({v,t:v})),st.cat);
+  const subs=[...subAvail].map(i=>S[i]).sort((a,b)=>a.localeCompare(b));
+  const subOpts=["All sub-categories",...subs];
+  if(st.sub!=="All sub-categories"&&!subs.includes(st.sub)) subOpts.push(st.sub);
+  fillSelect($("sel-sub"),subOpts.map(v=>({v,t:v})),st.sub);
+  $("warn").textContent=(st.sub!=="All sub-categories"&&!subs.includes(st.sub))?"⚠ Not sold at the selected locations / category":"";
+  const n=items.length, steps=[]; for(let k=5;k<n+5&&k<=Math.ceil(n/5)*5;k+=5)steps.push(k);
+  if(st.show!=="all"&&!steps.includes(st.show)&&steps.length) st.show=steps.reduce((a,b)=>Math.abs(b-st.show)<Math.abs(a-st.show)?b:a);
+  fillSelect($("sel-show"),[{v:"all",t:"All items"},...steps.map(v=>({v,t:v}))],st.show);
+  document.querySelectorAll("#seg-view button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.v===st.view));
+  document.querySelectorAll("#seg-by button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.v===st.by));
+
+  // charts
+  colChart($("c-loc"),L,locSales.map((v,i)=>locOn(i)?v:0),DATA.lcol,{faded:L.map((_,i)=>!locOn(i))});
+  pieChart($("c-cat"),C,catSales,DATA.ccol);
+  const top10=[...items].sort((a,b)=>b.sales-a.sales).slice(0,10);
+  barChart($("c-top"),top10.map(p=>p.item+(nLoc>1?" · "+L[p.loc]:"")),top10.map(p=>p.sales),"#2A9D8F");
+  const bins=[[0,50,"Under $50"],[50,100,"$50–100"],[100,250,"$100–250"],[250,500,"$250–500"],[500,1000,"$500–1K"],[1000,2500,"$1K–2.5K"],[2500,1e12,"$2.5K+"]];
+  colChart($("c-hist"),bins.map(b=>b[2]),bins.map(b=>items.filter(p=>p.sales>=b[0]&&p.sales<b[1]).length),"#457B9D",{fmt:fmtN});
+
+  // ranking
+  const key=p=>st.by==="units"?p.units:p.sales;
+  const sorted=[...items].sort((a,b)=>st.view==="Top"?key(b)-key(a)||b.sales-a.sales:key(a)-key(b)||a.sales-b.sales);
+  const N=st.show==="all"?n:Math.min(st.show,n), rows=sorted.slice(0,N);
+  const maxS=Math.max(...rows.map(p=>p.sales),1);
+  $("status").textContent=n===0?"No items match the current selection.":
+    `Showing ${st.view.toLowerCase()} ${fmtN(N)} of ${fmtN(n)} items, ranked by ${st.by==="units"?"units":"net sales"}. % share = item net sales ÷ net sales in view.`;
+  $("rank-body").innerHTML=rows.map((p,i)=>{
+    const sub=st.sub!=="All sub-categories"?st.sub:[...pairSubs[p.loc+"|"+p.item]].join(" / ");
+    return `<tr><td class="c">${i+1}</td><td class="item">${esc(p.item)}</td><td>${DATA.icons[p.loc]} ${esc(L[p.loc])}</td><td class="subc">${esc(sub)}</td>
+      <td class="num">${fmtN(p.units)}</td><td class="num bar"><i style="width:${(p.sales/maxS*100).toFixed(1)}%"></i><span>${fmt$2(p.sales)}</span></td>
+      <td class="num">${fmtP(tSales?p.sales/tSales:0)}</td><td class="num">${p.units?fmt$2(p.sales/p.units):"–"}</td></tr>`;
+  }).join("");
+}
+
+// ---------- overview (static) ----------
+function overview(){
+  const ls=L.map(()=>({sales:0,units:0,items:new Map()}));
+  ROWS.forEach(r=>{const o=ls[r[0]];o.sales+=r[5];o.units+=r[4];o.items.set(r[3],(o.items.get(r[3])||0)+r[5]);});
+  const tot=ls.reduce((a,o)=>a+o.sales,0), totU=ls.reduce((a,o)=>a+o.units,0);
+  const ranks=[...ls.keys()].sort((a,b)=>ls[b].sales-ls[a].sales);
+  let html="", nItems=0;
+  ls.forEach((o,i)=>{
+    let best="",bv=-1; o.items.forEach((v,k)=>{if(v>bv){bv=v;best=k;}});
+    const cnt=[...o.items.values()].filter(v=>v>0).length; nItems+=cnt;
+    html+=`<tr><td class="item">${DATA.icons[i]} ${esc(L[i])}</td><td class="num bar"><i style="width:${(o.sales/Math.max(...ls.map(x=>x.sales))*100).toFixed(1)}%"></i><span>${fmt$(o.sales)}</span></td>
+      <td class="num">${fmtP(o.sales/tot)}</td><td class="num">${fmtN(o.units)}</td><td class="num">${fmt$2(o.sales/o.units)}</td><td class="num">${cnt}</td>
+      <td>${esc(best)}</td><td class="num">${fmt$(bv)}</td><td class="c">${ranks.indexOf(i)+1}</td></tr>`;
+  });
+  html+=`<tr class="total"><td>Total Blue Wall</td><td class="num">${fmt$(tot)}</td><td class="num">100.0%</td><td class="num">${fmtN(totU)}</td><td class="num">${fmt$2(tot/totU)}</td><td class="num">${fmtN(nItems)}</td><td></td><td></td><td></td></tr>`;
+  $("score-body").innerHTML=html;
+  const R=DATA.recon;
+  $("recon-body").innerHTML=[["Item sales (all locations)",fmt$2(tot)],["Less: coupons","("+fmt$2(R.coupon)+")"],["Plus: tax",fmt$2(R.tax)],["Grand total",fmt$2(tot-R.coupon+R.tax)]]
+    .map(([a,b])=>`<tr><td>${a}</td><td class="num">${b}</td></tr>`).join("");
+  pieChart($("c-share"),L,ls.map(o=>o.sales),DATA.lcol);
+  colChart($("c-units"),L,ls.map(o=>o.units),DATA.lcol,{fmt:fmtN});
+}
+
+// ---------- tabs ----------
+function setTab(which){
+  const dash=which==="dash";
+  $("view-dash").hidden=!dash; $("view-over").hidden=dash;
+  $("tab-dash").setAttribute("aria-selected",dash); $("tab-over").setAttribute("aria-selected",!dash);
+}
+$("tab-dash").onclick=()=>setTab("dash");
+$("tab-over").onclick=()=>setTab("over");
+$("backtop").onclick=e=>{e.preventDefault();window.scrollTo({top:0,behavior:"smooth"});};
+
+buildTiles(); render(); overview();
+})();
+</script>
+</body>
+</html>
